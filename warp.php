@@ -10,79 +10,115 @@
   {
     die('Erreur connexion MySQL : ' . $err->getMessage());
   }
-
-// Le résultat du traitement est enregistré dans $resultat
  
-   // Envoi de la requête SQL
+   // Envoi des requêtes pour récupérer les tables/association
   $reponse = $bdd->query("SELECT id_banniere, version_sortie, nom_banniere, personnage1, personnage2, personnage3, personnage4, personnage5, personnage6, personnage7 FROM banniere");
   $reponse2 = $bdd->query("SELECT id_personnage, nom, type, voie, rarete FROM personnage");
   $reponse3 = $bdd->query("SELECT id_appartenir, id_banniere, id_personnage, rarete FROM appartenir");
 
-  // Lecture de toutes les lignes de la réponse dans un tableau associatif
+  // Stockage sous forme de tableaux
   $tableBanniere = $reponse->fetchAll(PDO::FETCH_ASSOC);
   $tablePersonnage = $reponse2->fetchAll(PDO::FETCH_ASSOC);
   $associationAppartenir = $reponse3->fetchAll(PDO::FETCH_ASSOC);
 
+
+if (empty($_POST["click"])){
+  ///////////////////////////////////// Récupérration des donners de la bannière ////////////////////////////////////////////////////
   $titre = $tableBanniere[0]["nom_banniere"]; //titre de la bannière
   $version = $tableBanniere[0]['id_banniere']; //prend la version initiale
-
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   $reponse4 = $bdd->query("SELECT id_personnage,rarete FROM appartenir WHERE id_banniere = '$version'");
   $personnage = $reponse4->fetchAll(PDO::FETCH_ASSOC); //liste des personnages de la bannière
-
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // 1) Stocker les id des perso 4*
   $reponse5 = $bdd->query("SELECT id_personnage FROM appartenir WHERE id_banniere = '$version' AND rarete=4");
   $personnage_4 = $reponse5->fetchAll(PDO::FETCH_ASSOC); //liste des personnages 4* de la bannière
+  
   $nom_id_4 = array();
   foreach($personnage_4 as $key => $value) {
-    $nom_id_4[] = $value;
+    $nom_id_4[] = $value; //Liste des id(association appartenir)
   };
 
-  //convertion des id en noms
+  // 2) convertion des id en noms
   $nom_str_4 = array();
   foreach($nom_id_4 as $key => $value) {
     $id = $value['id_personnage'];
+   
     $reponseAux = $bdd->query("SELECT nom FROM personnage WHERE id_personnage = '$id'");
     $auxiliaire = $reponseAux->fetchAll(PDO::FETCH_ASSOC);
-    $nom_str_4[] .= $auxiliaire[0];
+    $nom_str_4[] .= $auxiliaire[0]["nom"]; // variable avec tt les noms de perso rareté 4*
   };
 
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // 1) Stocker les id des perso 5*
   $reponse6 = $bdd->query("SELECT id_personnage FROM appartenir WHERE id_banniere = '$version' AND rarete=5");
   $personnage_5 = $reponse6->fetchAll(PDO::FETCH_ASSOC); //liste des personnages 5* de la bannière
-  $nom_5 = array();
+  
+  $nom_id_5 = array();
+  foreach($personnage_5 as $key => $value) {
+    $nom_id_5[] = $value; //Liste des id(association appartenir)
+  };
+
+  // 2) convertion des id en noms
+  $nom_str_5 = array();
+  foreach($nom_id_5 as $key => $value) {
+    $id = $value['id_personnage'];
+   
+    $reponseAux = $bdd->query("SELECT nom FROM personnage WHERE id_personnage = '$id'");
+    $auxiliaire = $reponseAux->fetchAll(PDO::FETCH_ASSOC);
+    $nom_str_5[] .= $auxiliaire[0]["nom"]; // variable avec tt les noms de perso rareté 5*
+  };
+}
+
+else{
+     ///////////////////////////////////// Récupérration des donners de la bannière ////////////////////////////////////////////////////
+  $titre = $tableBanniere[$_POST["click"]]["nom_banniere"]; //titre de la bannière
+  $version = $tableBanniere[$_POST["click"]]['id_banniere']; //prend la version initiale
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  $reponse4 = $bdd->query("SELECT id_personnage,rarete FROM appartenir WHERE id_banniere = '$version'");
+  $personnage = $reponse4->fetchAll(PDO::FETCH_ASSOC); //liste des personnages de la bannière
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // 1) Stocker les id des perso 4*
+  $reponse5 = $bdd->query("SELECT id_personnage FROM appartenir WHERE id_banniere = '$version' AND rarete=4");
+  $personnage_4 = $reponse5->fetchAll(PDO::FETCH_ASSOC); //liste des personnages 4* de la bannière
+  
+  $nom_id_4 = array();
   foreach($personnage_4 as $key => $value) {
-    $nom_5[] = $value;
-  }
+    $nom_id_4[] = $value; //Liste des id(association appartenir)
+  };
 
-  $bdd = null;                // Fin de la connexion
+  // 2) convertion des id en noms
+  $nom_str_4 = array();
+  foreach($nom_id_4 as $key => $value) {
+    $id = $value['id_personnage'];
+   
+    $reponseAux = $bdd->query("SELECT nom FROM personnage WHERE id_personnage = '$id'");
+    $auxiliaire = $reponseAux->fetchAll(PDO::FETCH_ASSOC);
+    $nom_str_4[] .= $auxiliaire[0]["nom"]; // variable avec tt les noms de perso rareté 4*
+  };
 
-var_dump($nom_str_4);
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // 1) Stocker les id des perso 5*
+  $reponse6 = $bdd->query("SELECT id_personnage FROM appartenir WHERE id_banniere = '$version' AND rarete=5");
+  $personnage_5 = $reponse6->fetchAll(PDO::FETCH_ASSOC); //liste des personnages 5* de la bannière
+  
+  $nom_id_5 = array();
+  foreach($personnage_5 as $key => $value) {
+    $nom_id_5[] = $value; //Liste des id(association appartenir)
+  };
 
-  // Initialisation de la variable pour le formulaire prérempli
-if (!empty($_POST["click"]))
-    {
-        $version = $tableBanniere[$_POST["click"]-1]['version_sortie']; //version de la bannière
-        $titre = $tableBanniere[$_POST["click"]-1]["nom_banniere"]; //titre de la bannière
-        $nom = [null, null, null, null, null, null, null]; //nom sur 5 ou 7 persos
+  // 2) convertion des id en noms
+  $nom_str_5 = array();
+  foreach($nom_id_5 as $key => $value) {
+    $id = $value['id_personnage'];
+   
+    $reponseAux = $bdd->query("SELECT nom FROM personnage WHERE id_personnage = '$id'");
+    $auxiliaire = $reponseAux->fetchAll(PDO::FETCH_ASSOC);
+    $nom_str_5[] .= $auxiliaire[0]["nom"]; // variable avec tt les noms de perso rareté 5*
+  };
+}
 
-        // liste des noms de pesonnages implémentés dans noms par rapport à si on change de bannière
-         for ($i=3;  $i<=9; $i++){
-            $nom[$i-3] = $tableBanniere[$_POST["click"]-1]["personnage".($i-2)];
-         };
-
-         if (($nom[5]&&$nom[6])<>null){
-         $altNom = [$nom[0],$nom[1],$nom[2],$nom[3]]; //noms des personnages 5* si plusieurs
-         }
-         else
-            $altNom = array();
-        
-        // gestion de plus. perso 5*, si 1 lors du tirage (else) sinon prendre dans URL
-         if (isset($_GET["perso"])){
-            $tirage = $_GET["perso"];
-         }
-         else{
-            $tirage = $nom[0];
-         }
-    }
-
+$bdd = null;                // Fin de la connexion
 
 // if (isset($_POST["tirage"])){
     
@@ -188,7 +224,7 @@ if (!empty($_POST["click"]))
     <form id="barVersion" action="<?= $_SERVER['PHP_SELF'] ?>" method="post">
             <div class="containerVersionRelative">
                 <?php foreach($tableBanniere as $key => $value) {
-                    echo "<button type='submit' name='click' "."value='".$value["id_banniere"]."' class='version'";
+                    echo "<button type='submit' name='click' "."value='".($value["id_banniere"]-1)."' class='version'";
                     echo 'style="background-image:url(\'img/splash/Character_' . str_replace(" ", "_", $value['personnage1']) . '_Splash_Art.webp\')">';
                     echo $value['version_sortie'];
                     echo "</button>" ;
@@ -210,11 +246,11 @@ if (!empty($_POST["click"]))
                 </h2>
 
                 <div class="sidePersoFlex">
-                    <?php foreach($nom_4 as $key => $value) {
+                    <?php foreach($nom_str_4 as $key => $value) {
                         $sideCharacter = "<div class='sidePerso'";
                         $sideCharacter .= 'style="background-image:url(\'img/splash/Character_' . str_replace(" ", "_", $value) . '_Splash_Art.webp\')">';
                         $sideCharacter .= "</div>";
-                        var_dump($nom_4);
+                        echo $sideCharacter;
                     };
                     
                     // for ($i=0;  $i<=2; $i++){
@@ -242,10 +278,9 @@ if (!empty($_POST["click"]))
             <section class="mainPerso"
             
             <?php
-                echo 'style="background-image:url(\'img/splash/Character_' . str_replace(" ", "_", $nom[0]) . '_Splash_Art.webp\')"';
+                echo 'style="background-image:url(\'img/splash/Character_' . str_replace(" ", "_", $nom_str_5[count($nom_str_5)-1]) . '_Splash_Art.webp\')"';
                 
             ?>>
-            <?php var_dump($tirage); ?>
             
             <!-- str_replace pour formater le nom dans l'entité banniere au fichier -->
             </section>

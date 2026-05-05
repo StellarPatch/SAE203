@@ -1,15 +1,8 @@
 <?php
+
+    require "fonctions_BDD.php";
   // ****** ACCES AUX DONNEES ******
-  try   // Connexion à la base de données
-  {
-    $options = array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8",
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_SILENT);
-    $bdd = new PDO('mysql:host=localhost;dbname=honkai', 'root', '', $options);
-  }
-  catch(Exception $err)
-  {
-    die('Erreur connexion MySQL : ' . $err->getMessage());
-  }
+    $bdd = connexionBDD();
  
    // Envoi des requêtes pour récupérer les tables/association
   $reponse = $bdd->query("SELECT id_banniere, version_sortie, nom_banniere, personnage1, personnage2, personnage3, personnage4, personnage5, personnage6, personnage7 FROM banniere");
@@ -251,24 +244,7 @@ $bdd = null;                // Fin de la connexion
                         $sideCharacter .= 'style="background-image:url(\'img/splash/Character_' . str_replace(" ", "_", $value) . '_Splash_Art.webp\')">';
                         $sideCharacter .= "</div>";
                         echo $sideCharacter;
-                    };
-                    
-                    // for ($i=0;  $i<=2; $i++){
-                    //     if (($nom[5] && $nom[6])==null)  //s'il y a 5 perso faire +2 pour charger les images des persos 4*
-                    //     {
-                    //         $sideCharacter = "<div class='sidePerso'";
-                    //         $sideCharacter .= 'style="background-image:url(\'img/splash/Character_' . str_replace(" ", "_", $nom[$i+2]) . '_Splash_Art.webp\')">';
-                    //         $sideCharacter .= "</div>";
-                    //     }
-                    //     else //s'il y a 7 perso faire +4 pour charger les images des persos 4*
-                    //     {
-                    //       $sideCharacter = "<div class='sidePerso'";
-                    //         $sideCharacter .= 'style="background-image:url(\'img/splash/Character_' . str_replace(" ", "_", $nom[$i+4]) . '_Splash_Art.webp\')">';
-                    //         $sideCharacter .= "</div>";
-                    //     }
-                    //     echo $sideCharacter;
-                    // };
-                    ?>
+                    };?>
                 </div>
 
             </section>
@@ -279,7 +255,7 @@ $bdd = null;                // Fin de la connexion
             
             <?php
                 echo 'style="background-image:url(\'img/splash/Character_' . str_replace(" ", "_", $nom_str_5[count($nom_str_5)-1]) . '_Splash_Art.webp\')"';
-                
+                // prend le dernier dans le tableau
             ?>>
             
             <!-- str_replace pour formater le nom dans l'entité banniere au fichier -->
@@ -297,13 +273,16 @@ $bdd = null;                // Fin de la connexion
 
             <!-- Affichage d'un select si plusieurs perso 5* -->
 
-            <?php if (!empty($altNom[1]) || !empty($altNom[2]) || !empty($altNom[3])){
+            <?php if ( count($nom_str_5) > 1){
                 echo '<select name="altNom" action="<?= $_SERVER[\'PHP_SELF\'] ?>" method="post">';
-                for ($i=0;  $i<=3; $i++){
-                    if ($altNom[$i] <> null)
-                    {echo "<option value='$nom[$i]'>$altNom[$i]</option>";}
+
+                foreach($nom_str_5 as $key => $value){
+                    if ($key == (count($nom_str_5)-1)) // si c'est le dernier dans la liste
+                        echo "<option value='$value' selected>$value</option>";
+                    else
+                         echo "<option value='$value'>$value</option>";
                 }
-                
+
                 echo "</select>";
             }
             ?>

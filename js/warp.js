@@ -89,7 +89,7 @@ function tirage() {
     let params = new URLSearchParams(document.location.search);
     let name = params.get("perso");
     
-    // console.log(name)
+    //console.log(name)
 
     main.classList.toggle("animation");
 

@@ -1,0 +1,571 @@
+body{
+    margin: 0;
+    background: linear-gradient(90deg,rgb(34, 34, 34),rgb(82, 82, 82));
+    position: relative;
+    font-family: DIN;
+    overflow:hidden;
+    cursor: url("../img/cursor.cur"),auto;
+    
+}
+
+@font-face{
+    font-family: DIN;
+    src: url("../fonts/D-DIN.ttf");
+}
+
+/* ********************************  INTRO  ********************************** */
+
+/* Eviter de clignoter lors du hover /ref TPS2 ac clip-path */
+
+.relative{
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    transition: 0.5s ease;
+}
+
+/* Page d'accueil, disparait lorsque souris sort de l'écran pour faire styler et hide info*/
+
+/* Contenaire "vw x vh" */
+#intro{
+    background: #131313;
+    width: 100vw;
+    min-height: 100vh;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 0.5s;
+}
+
+#logo{
+    width: 60%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 20vh;
+}
+
+/* fonction pour faire disparaitre */
+
+.relative.inactive{
+    opacity: 0;
+    height: 0;
+}
+
+/* ********************** ACCUEIL *********************** */
+
+header{
+    /* background: rgba(0, 0, 0, .4); */
+    position: relative;
+    background: url("../img/header.webp");
+    background-size: 150% 100%;
+    background-position: 55%;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 64px;
+    /* border-bottom: 2px solid #a19c70; */
+}
+
+.btnAccueil{
+    position: absolute;
+    width: 15%;
+    right: 42.5%;
+    top: 12px;
+    z-index: 1;
+    transition: 0.2s;
+    z-index: 2;
+}
+
+.btnAccueil:hover{
+    opacity: 0.8;
+    scale: 1.1;
+}
+
+.iconFlex{
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 8px;
+}
+
+.icon{
+    width: 48px;
+    cursor: url("../img/cursor.cur"), pointer;
+    transition: 0.4s;
+}
+
+.icon:hover,#btnMenu:hover{
+    transform: scale(1.2)
+}
+
+.icon:active,#btnMenu:active{
+    transform: translate(2px);
+    opacity: 0.5;
+}
+
+.translate{
+    transform: translateX(-50vw);
+}
+
+/* ********************************  MAIN  ********************************** */
+
+#monnaieMargin{
+    display: flex;
+    margin: auto;
+}
+
+#monnaieFlex{
+    display:flex;
+    margin-left: auto;
+}
+
+.monnaie{
+    position: relative;
+    width: 32px;
+    border: grey 1px solid;
+    border-radius: 16px;
+    padding: 4px 0;
+    padding-left: 48px;
+    padding-right: 8px;
+    color: #fff;
+    text-align: end;
+
+    margin-top: 16px;
+    margin-right: 32px;
+}
+
+.monnaie>img{
+    position: absolute;
+    width: 32px;
+    top: -4px;
+    left: 4px;
+}
+
+/* ********************************  MENU DEROULANT  ********************************** */
+
+#menu{
+    position: fixed;
+    top: 0;
+    left: 0;
+    border-top-right-radius: 32px;
+    background: url("../img/wallpaper/Wallpaper_Nameless_Journey.webp");
+    background-repeat: no-repeat;
+    background-size: 100%;
+    width: 372px;
+    height: 100vh;
+    text-align: center;
+    border: 1px solid black;
+    transition: 0.2s;
+    transform: translateX(-100%);
+    color: white;
+
+    z-index: 2;
+}
+
+#menu.active{
+    transform: translateX(0%);
+}
+
+.out{
+    position: fixed;
+    top: 64px;
+    background: black;
+    opacity: 50%;
+    height: 100vh;
+    width: 100vw;
+}
+
+.out.active{
+    display: none;
+}
+
+hr{
+    width: 90%;
+}
+
+#relative{
+    position: relative;
+}
+
+#btnMenu,#lieu{
+    position: absolute;
+    width: 48px;
+    cursor: url("../img/cursor.cur"), pointer;
+    margin-left: 8px;
+    top: 8px;
+    left: 100%;
+    transition: 0.5s;
+    
+}
+
+#lieu{
+    background: linear-gradient(90deg,rgba(0,0,0,.4), transparent);
+    padding: 4px 32px;
+    margin-left: 64px;
+    top: 20px;
+    color: white;
+}
+
+#lieu>li{
+    color: rgb(255, 246, 124);
+}
+
+#lieu>li>div{color: white;}
+
+/*  */
+.phoneFlex{
+    display: flex;
+    justify-content: space-between;
+    text-align: start;
+    gap: 4px;
+    margin: 8px 16px ;
+}
+
+#UID{
+    text-decoration: underline;
+}
+
+.profil{
+    width: 5vw;
+}
+
+.description{
+    display: flex;
+    margin: auto;
+    padding: 8px 8px;
+    width: 80%;
+    color: white;
+    height: 48px;
+    background: linear-gradient(90deg,rgba(0,0,0,.4),transparent,rgba(0,0,0,.4));
+}
+
+.phoneOption{
+    background: white;
+    border-radius: 16px;
+    padding: 0px 16px;
+    padding-bottom: 8px;
+    color: black;
+    height: fit-content;
+}
+
+.levelBar{
+    display: flex;
+    margin: auto;
+    border-radius: 0;
+    background: rgb(246, 240, 168);;
+    width: 90%;
+    height: 2px;
+}
+
+img{
+    width: 100%;
+}
+
+
+.grid>div>img{
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+
+.grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    margin: 0 24px;
+    align-items: center;
+}
+
+.grid>div{
+    border: grey 1px solid;
+    margin: 8px;
+    padding: 4px;
+    cursor: url("../img/cursor.cur"), pointer;
+    transition: 0.2s;
+    font-size: 11px;
+    height: 64px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.grid>div:hover{
+    transition: 0.2s;
+    transform: scale(1.1);
+}
+
+.grid>div>img{
+    width: 70%;
+}
+
+.grid > div:first-child {
+    grid-column: 1 /span 2;
+    grid-row: 1 / span 1;
+}
+
+.grid>div:first-child>img{
+    width: 35%;
+}
+
+.grid>div:nth-child(4){
+    grid-row: 2/ 1 span;
+    grid-column: 1/ 2 span;
+}
+
+.grid>div:nth-child(4)>img{
+    width: 35%;
+}
+
+.color{
+    color: rgb(255, 227, 135);
+}
+
+.align{
+    align-items: center;
+}
+
+/* ********************************  MAIN WARP  ********************************** */
+
+main{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin-top: 48px;
+    transform: translateY(0);
+    transition: 1.5s ease;
+}
+
+/* faire bouger contenu en mm tps que menu */
+
+main.menu{
+    translate: 200px;
+    transition: 0.2s;
+}
+
+/* faire slide lors changement de version */
+
+main.animation{
+    transform: translateY(100vh);
+    transition: 1s;
+}
+
+/* AUTRE A UTILISER DANS INVENTAIRE */
+/* .classification{
+    display: flex;
+    margin: auto;
+}
+
+.type{
+    width: 48px;
+    opacity: 40%;
+    padding: 0 16px;
+    padding-bottom: 4px;
+    border-bottom: #ffffff solid 1px;
+    transition: 0.2s;
+}
+
+.type:hover{
+    opacity: 100%;
+} */
+
+/* *********  bar des versions (à améliorer)  ********* */
+
+#barVersion{
+    position: absolute;
+    color: white;
+    left: 10vw;
+    top: 61px;
+    text-align: center;
+    background: rgb(71, 62, 62);
+    /* sosutraire la taille du header pour pouvoir overflow scroll jusqu'à la 1.0 */
+    height: calc(100vh - 61px);
+    width: 48px;
+
+    overflow-y: scroll;
+    scrollbar-width: none;
+    z-index: 1;
+}
+
+/* faire disparaitre quand ouvre menu sinon moche */
+
+#barVersion.inactive{
+    display: none;
+}
+
+/* ****************** contenu bannière ****************** */
+
+.container{
+    position: relative;
+    height: 40vh;
+    width: 60vw;
+    padding: 32px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    background: rgb(161, 161, 161);
+}
+
+/* partie gauche */
+
+.content{
+    position: relative;
+    background: linear-gradient(#fff,rgba(255,255,255,.7));
+    height: 50vh;
+    width: fit-content;
+    border-top-right-radius: 64px;
+    padding: 12px;
+}
+
+.content>.etiquette{
+    position: absolute;
+    top: 32px;
+    left: -16px;
+    width: fit-content;
+    background: #239ca9;
+    color: #fff;
+    padding: 8px 32px;
+}
+
+.containerVersionRelative{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+
+/* vignettes des versions */
+
+.version{
+    margin: 4px;
+    padding: 4px;
+    background: url();
+    background-size: 300%;
+    background-repeat: no-repeat;
+    background-position: center;
+    color: rgb(255, 255, 255);
+    cursor: url("../img/cursor.cur"), pointer;
+}
+
+.version:hover{
+    opacity: 0.67;
+}
+
+#titreBanniere{
+    margin-left: 64px;
+    color: #000000;
+}
+
+/* partie droite */
+
+.mainPerso{
+    width: 40vw;
+    height: 40vw;
+    background-image: url("../img/splash/Character_Yunli_Splash_Art.webp");
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.sidePersoFlex{
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.sidePerso{
+    height: 30vh;
+    width: 6vw;
+    border-radius: 128px;
+    background-image: url("../img/splash/Character_Acheron_Splash_Art.webp");
+    background-size: 300%;
+    background-repeat: no-repeat;
+    background-position-x: center;
+    background-position-y: center;
+
+    border: #131313 0.5px solid;
+}
+
+/* Bas le bouton? */
+
+.btn{
+    position: relative;
+    width: 192px;
+    border-radius: 100%;
+    cursor: url("../img/cursor.cur"), pointer;
+    align-items: center;
+    margin: 64px auto;
+    background: none;
+    border: none;
+}
+
+.btn:hover{
+    opacity: 0.67;
+}
+
+.btnFlex{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn>img{
+    position: absolute;
+    left: 0;
+}
+
+.btn>div{
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 13px;
+    text-align: center;
+    color: #fff;
+}
+
+select{
+    height: fit-content;
+    margin-top: 48px;
+    padding: 8px 32px;
+    border-radius: 16px;
+    border: 1px #ffe385 solid;
+    color: white;
+    background: black;
+    text-align: center;
+}
+
+/* ****************************** PARTIE TIRAGE ANIMATION ****************************** */
+
+.screenPull{
+    background: rgb(255, 255, 255);
+    position: fixed;
+    left: 0;
+    top: 61px;
+    width: 100vw;
+    height: calc(100vh - 61px);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    transition: 0s;
+    z-index: 1;
+}
+
+.screenPull.hidden{
+    clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+}
+
+.gate1{
+    background: white;
+    width: 100vw;
+    height: 100%;
+    clip-path: polygon(100% 0, 0 0, 0 100%);
+    transition: 2s;
+}
+
+.gate1.test{
+    
+}
+
+.gate2{
+
+}

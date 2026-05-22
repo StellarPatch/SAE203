@@ -1,3 +1,7 @@
+html{
+    cursor: url("../img/cursor.cur"), pointer;
+}
+
 body{
     margin: 0;
     background: linear-gradient(90deg,rgb(34, 34, 34),rgb(82, 82, 82));

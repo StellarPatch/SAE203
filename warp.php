@@ -118,8 +118,19 @@ if(!empty($_POST["altNom"]))
 else
     $altNom = $nom_str_5[count($nom_str_5)-1];
 
-var_dump($altNom);
-var_dump($version);
+    // Récupération de la bannière;
+        $reqVersion = "
+        SELECT a.id_banniere
+        FROM appartenir a
+        JOIN personnage p 
+            ON p.id_personnage = a.id_personnage
+        WHERE p.nom = '$altNom'
+        LIMIT 1
+        ";
+
+    $lectureVersion = lectureBDD($reqVersion);
+
+    $version = $lectureVersion[0]["id_banniere"];
 
 if (isset($_POST["tirage"])){
      // Récupération de l'id du personnage
@@ -135,6 +146,7 @@ if (isset($_POST["tirage"])){
        VALUES ('$id_personnage', '$version')";  
         
     // echo $insert;
+
 
     $nb_ecriture = ecritureBDD($insert);
       if ($nb_ecriture == 1)

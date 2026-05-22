@@ -12,33 +12,37 @@ const select = document.querySelector("select[name='altNom']"); //sélecteur en 
 const mainCharacter = document.querySelector(".mainPerso"); //perso star en bannière
 var perso = "";
 
+
 // intro.addEventListener("click", start);
 out.addEventListener("click", menu);
 btnMenu.addEventListener("click", menu);
+
+const inputs = document.querySelectorAll('.classification>input');  // sélectionne chaque input de type et voie
 
 document.querySelectorAll("input").forEach(e=>{
 			e.addEventListener("change", filtre);
 		})
 
 function filtre(){
-			document.querySelector(".filtreGrid").classList.toggle(this.name);
-            
+    let aucunSelectionne = true; // aucun filtre actifs
+    // si 1 input est coché, alors aucunSelectionne devient true
+    inputs.forEach(input => {
+    if (input.checked) {
+        aucunSelectionne = false;
+    }
+    });
+	
+    // ajoute une classe pour tout afficher si aucun filtre actifs
+    if (aucunSelectionne == false){
+        document.querySelector(".filtreGrid").classList.remove("rien");
+        document.querySelector(".filtreGrid").classList.toggle(this.name);
+    }
+    else // retire .rien si un filtre est actif
+    {
+        document.querySelector(".filtreGrid").classList.toggle("rien");
+        document.querySelector(".filtreGrid").classList.toggle(this.name);
+    }       
 }
-
-
-// function start() {
-//     // fait disparaitre "l'intro"
-//     intro.classList.add("inactive");
-
-//     const icons = document.querySelectorAll(".iconFlex .icon");
-
-//     // animation des icônes qui viennent
-//     icons.forEach((icon, i) => {
-//         setTimeout(() => {
-//             icon.classList.remove("translate");
-//         }, 50 * (i + 1));
-//     });
-// }
 
 function menu() {
     Menu.classList.toggle("active"); // sort le menu

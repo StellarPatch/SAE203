@@ -1,3 +1,7 @@
+html{
+    cursor: url("../img/cursor.cur"), pointer;
+}
+
 body{
     margin: 0;
     background: linear-gradient(90deg,rgb(34, 34, 34),rgb(82, 82, 82));
@@ -334,6 +338,7 @@ main{
     margin-top: 48px;
     transform: translateY(0);
     transition: 1.5s ease;
+    cursor: url("../img/cursor.cur"), pointer;
 }
 
 /* faire bouger contenu en mm tps que menu */
@@ -364,6 +369,7 @@ main.animation{
     padding-bottom: 4px;
     border-bottom: #ffffff solid 1px;
     transition: 0.2s;
+    cursor: url("../img/cursor.cur"), pointer;
 }
 
 label input{
@@ -383,6 +389,8 @@ label:has(input:checked) > .type{
 }
 
 .filtreGrid>div{display: none;}
+
+.filtreGrid.rien>div{display: block;}
 
 		.filtreGrid.Destruction>.Destruction,
 		.filtreGrid.Hunt>.Hunt,
@@ -409,6 +417,7 @@ label:has(input:checked) > .type{
     display: grid;
     grid-template-columns: repeat(8, 1fr);
     margin: 32px 128px;
+    cursor: url("../img/cursor.cur"), pointer;
 }
 
 .filtreGrid div{
@@ -464,6 +473,7 @@ form{
     justify-content: space-between;
     align-items: center;
     gap: 32px;
+    cursor: url("../img/cursor.cur"), pointer;
 }
 
 select{

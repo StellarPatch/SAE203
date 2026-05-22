@@ -83,7 +83,7 @@ if (!empty($doublon)) // PAS DE DOUBLON ET RIEN COCHER
                                 WHERE rarete = '5' ORDER BY nom ASC"; // SI UNIQUEMENT 5*
             }
     }
-  else
+    else
     {
     if (empty($rarete) || (in_array("4", $rarete) && in_array("5", $rarete))){
             $reponse2 = "SELECT DISTINCT personnage.id_personnage, nom, type, voie, rarete FROM personnage";
@@ -99,7 +99,7 @@ if (!empty($doublon)) // PAS DE DOUBLON ET RIEN COCHER
             }
     } 
   
-var_dump($reponse);
+// var_dump($reponse);
 
   // Stockage sous forme de tableaux
   $tableObtention = lectureBDD($reponse);
@@ -245,7 +245,7 @@ var_dump($reponse);
             </label>
         </div>
 
-       <div class="filtreGrid">
+       <div class="filtreGrid rien">
             <?php
                 if ($selection == "personnage")
                     $table = $tablePersonnage;

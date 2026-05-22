@@ -3,143 +3,119 @@
     require "fonctions_BDD.php";
   // ****** ACCES AUX DONNEES ******
     $bdd = connexionBDD();
- 
-   // Envoi des requêtes pour récupérer les tables/association
-  $reponse = "SELECT id_banniere, version_sortie, nom_banniere FROM banniere";
-  $reponse2 = "SELECT id_personnage, nom, type, voie, rarete FROM personnage";
-  $reponse3 = "SELECT id_appartenir, id_banniere, id_personnage, rarete FROM appartenir";
+
+    // DEFINITION $OPTION DOUBLON
+    
+     if (isset($_POST["doublon"])) {
+        if (in_array("double", $_POST["doublon"])) {
+        $doublon = $_POST["doublon"];} 
+        else {
+        $doublon = array();}} 
+    else {
+        $doublon = array();}  
+
+
+    // DEFINITION $OPTION RARETE
+
+    if (isset($_POST["rarete"])) {
+        if (in_array("4", $_POST["rarete"]) || in_array("5", $_POST["rarete"]))
+            $rarete = $_POST["rarete"];
+        else
+            $rarete = array();
+        }
+    else {
+        $rarete = array();}
+
+//////////////////////////////////// REQUETE 1 ///////////////////////////////////////////
+
+if (!empty($doublon)) // PAS DE DOUBLON ET RIEN COCHER
+    {
+        if (empty($rarete) || (in_array("4", $rarete) && in_array("5", $rarete))){
+            $reponse = "SELECT personnage.id_personnage, nom, type, voie, rarete FROM personnage 
+            INNER JOIN obtention ON personnage.id_personnage = obtention.id_personnage ORDER BY nom ASC";
+        }
+        else
+            {
+                if (in_array("4" , $rarete)) // SI UNIQUEMENT 4*
+                    $reponse = "SELECT personnage.id_personnage, nom, type, voie, rarete FROM personnage 
+                                INNER JOIN obtention ON personnage.id_personnage = obtention.id_personnage 
+                                WHERE rarete = '4' ORDER BY nom ASC";
+                if (in_array("5" , $rarete)) // SI UNIQUEMENT 5*
+                    $reponse = "SELECT personnage.id_personnage, nom, type, voie, rarete FROM personnage 
+                                INNER JOIN obtention ON personnage.id_personnage = obtention.id_personnage 
+                                WHERE rarete = '5' ORDER BY nom ASC";
+            }
+    }
+  else
+    {
+    if (empty($rarete) || (in_array("4", $rarete) && in_array("5", $rarete))){
+            $reponse = "SELECT DISTINCT personnage.id_personnage, nom, type, voie, rarete FROM personnage 
+            INNER JOIN obtention ON personnage.id_personnage = obtention.id_personnage ORDER BY nom ASC";
+        }
+        else
+            {
+                if (in_array("4" , $rarete))
+                    $reponse = "SELECT DISTINCT personnage.id_personnage, nom, type, voie, rarete FROM personnage 
+                                INNER JOIN obtention ON personnage.id_personnage = obtention.id_personnage 
+                                WHERE rarete = '4' ORDER BY nom ASC"; // SI UNIQUEMENT 4*
+                if (in_array("5" , $rarete))
+                    $reponse = "SELECT DISTINCT personnage.id_personnage, nom, type, voie, rarete FROM personnage 
+                                INNER JOIN obtention ON personnage.id_personnage = obtention.id_personnage 
+                                WHERE rarete = '5' ORDER BY nom ASC"; // SI UNIQUEMENT 5*
+            }
+    } 
+
+//////////////////////////////////// REQUETE 2 ///////////////////////////////////////////
+
+  if (!empty($doublon)) // PAS DE DOUBLON ET RIEN COCHER
+    {
+        if (empty($rarete) || (in_array("4", $rarete) && in_array("5", $rarete))){
+            $reponse2 = "SELECT personnage.id_personnage, nom, type, voie, rarete FROM personnage 
+            ORDER BY nom ASC";
+        }
+        else
+            {
+                if (in_array("4" , $rarete))
+                    $reponse2 = "SELECT personnage.id_personnage, nom, type, voie, rarete FROM personnage 
+                                WHERE rarete = '4' ORDER BY nom ASC"; // SI UNIQUEMENT 4*
+                if (in_array("5" , $rarete))
+                    $reponse2 = "SELECT personnage.id_personnage, nom, type, voie, rarete FROM personnage 
+                                WHERE rarete = '5' ORDER BY nom ASC"; // SI UNIQUEMENT 5*
+            }
+    }
+  else
+    {
+    if (empty($rarete) || (in_array("4", $rarete) && in_array("5", $rarete))){
+            $reponse2 = "SELECT DISTINCT personnage.id_personnage, nom, type, voie, rarete FROM personnage";
+        }
+        else
+            {
+                if (in_array("4" , $rarete))
+                    $reponse2 = "SELECT DISTINCT personnage.id_personnage, nom, type, voie, rarete FROM personnage 
+                                WHERE rarete = '4' ORDER BY nom ASC"; // SI UNIQUEMENT 4*
+                if (in_array("5" , $rarete))
+                    $reponse2 = "SELECT DISTINCT personnage.id_personnage, nom, type, voie, rarete FROM personnage
+                                WHERE rarete = '5' ORDER BY nom ASC"; // SI UNIQUEMENT 5*
+            }
+    } 
+  
+var_dump($reponse);
 
   // Stockage sous forme de tableaux
-  $tableBanniere = lectureBDD($reponse);
+  $tableObtention = lectureBDD($reponse);
   $tablePersonnage = lectureBDD($reponse2);
-  $associationAppartenir = lectureBDD($reponse3);
 
+// Choix de sélection entre les personnages obtenu et la liste de tt les perso
 
-if (empty($_POST["click"])){
-  ///////////////////////////////////// Récupérration des donners de la bannière ////////////////////////////////////////////////////
-  $titre = $tableBanniere[0]["nom_banniere"]; //titre de la bannière
-  $version = $tableBanniere[0]['id_banniere']; //prend la version initiale
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  $reponse4 = "SELECT id_personnage,rarete FROM appartenir WHERE id_banniere = '$version'";
-  $personnage = lectureBDD($reponse4); //liste des personnages de la bannière
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // 1) Stocker les id des perso 4*
-  $reponse5 = "SELECT id_personnage FROM appartenir WHERE id_banniere = '$version' AND rarete=4";
-  $personnage_4 = lectureBDD($reponse5); //liste des personnages 4* de la bannière
-  
-  $nom_id_4 = array();
-  foreach($personnage_4 as $key => $value) {
-    $nom_id_4[] = $value; //Liste des id(association appartenir)
-  };
+  if (empty($_POST["selection"]))
+    $selection = "obtention";
+  else{
+    if ($_POST["selection"] == "obtention")
+        $selection = "obtention";
+    else
+        $selection = "personnage";
+  }
 
-  // 2) convertion des id en noms
-  $nom_str_4 = array();
-  foreach($nom_id_4 as $key => $value) {
-    $id = $value['id_personnage'];
-   
-    $reponseAux = "SELECT nom FROM personnage WHERE id_personnage = '$id'";
-    $auxiliaire = lectureBDD($reponseAux);
-    $nom_str_4[] .= $auxiliaire[0]["nom"]; // variable avec tt les noms de perso rareté 4*
-  };
-
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // 1) Stocker les id des perso 5*
-  $reponse6 = "SELECT id_personnage FROM appartenir WHERE id_banniere = '$version' AND rarete=5";
-  $personnage_5 = lectureBDD($reponse6); //liste des personnages 5* de la bannière
-  
-  $nom_id_5 = array();
-  foreach($personnage_5 as $key => $value) {
-    $nom_id_5[] = $value; //Liste des id(association appartenir)
-  };
-
-  // 2) convertion des id en noms
-  $nom_str_5 = array();
-  foreach($nom_id_5 as $key => $value) {
-    $id = $value['id_personnage'];
-   
-    $reponseAux = "SELECT nom FROM personnage WHERE id_personnage = '$id'";
-    $auxiliaire = lectureBDD($reponseAux);
-    $nom_str_5[] .= $auxiliaire[0]["nom"]; // variable avec tt les noms de perso rareté 5*
-  };
-}
-
-else{
-  ///////////////////////////////////// Récupérration des donners de la bannière ////////////////////////////////////////////////////
-  $titre = $tableBanniere[$_POST["click"]]["nom_banniere"]; //titre de la bannière
-  $version = $tableBanniere[$_POST["click"]]['id_banniere']; //prend la version actuelle
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  $reponse4 = "SELECT id_personnage,rarete FROM appartenir WHERE id_banniere = '$version'";
-  $personnage = lectureBDD($reponse4); //liste des personnages de la bannière
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // 1) Stocker les id des perso 4*
-  $reponse5 = "SELECT id_personnage FROM appartenir WHERE id_banniere = '$version' AND rarete=4";
-  $personnage_4 = lectureBDD($reponse5); //liste des personnages 4* de la bannière
-  
-  $nom_id_4 = array();
-  foreach($personnage_4 as $key => $value) {
-    $nom_id_4[] = $value; //Liste des id(association appartenir)
-  };
-
-  // 2) convertion des id en noms
-  $nom_str_4 = array();
-  foreach($nom_id_4 as $key => $value) {
-    $id = $value['id_personnage'];
-   
-    $reponseAux = "SELECT nom FROM personnage WHERE id_personnage = '$id'";
-    $auxiliaire = lectureBDD($reponseAux);
-    $nom_str_4[] .= $auxiliaire[0]["nom"]; // variable avec tt les noms de perso rareté 4*
-  };
-
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // 1) Stocker les id des perso 5*
-  $reponse6 = "SELECT id_personnage FROM appartenir WHERE id_banniere = '$version' AND rarete=5";
-  $personnage_5 = lectureBDD($reponse6); //liste des personnages 5* de la bannière
-  
-  $nom_id_5 = array();
-  foreach($personnage_5 as $key => $value) {
-    $nom_id_5[] = $value; //Liste des id(association appartenir)
-  };
-
-  // 2) convertion des id en noms
-  $nom_str_5 = array();
-  foreach($nom_id_5 as $key => $value) {
-    $id = $value['id_personnage'];
-   
-    $reponseAux = "SELECT nom FROM personnage WHERE id_personnage = '$id'";
-    $auxiliaire = lectureBDD($reponseAux);
-    $nom_str_5[] .= $auxiliaire[0]["nom"]; // variable avec tt les noms de perso rareté 5*
-  };
-}
-
-// TRAITEMENT DU FORMULAIRE
-// Initialisation des variables du select
-if(!empty($_POST["altNom"]))
-    $altNom = $_POST["altNom"];
-else
-    $altNom = $nom_str_5[count($nom_str_5)-1];
-
-if (isset($_POST["tirage"])){
-     // Récupération de l'id du personnage
-     $tirage = "SELECT id_personnage FROM personnage WHERE nom = '$altNom'";
-     $lectureTirage = lectureBDD($tirage);
-     $id_personnage = $lectureTirage[0]["id_personnage"];
-
-    //  var_dump($tirage);
-    //  var_dump($lectureTirage[0]["id_personnage"]);
-
-     // Requête SQL
-    $insert = "INSERT INTO obtention (id_personnage, id_banniere)
-       VALUES ('$id_personnage', '$version')";  
-        
-    // echo $insert;
-
-    $nb_ecriture = ecritureBDD($insert);
-      if ($nb_ecriture == 1)
-        $resultat = "Article <span class='code'>test</span> enregistré dans la base de données";
-      else
-        $erreur = "Echec lors de l'enregistrement de l'article";
-
-}
 ?>
 
 
@@ -199,19 +175,141 @@ if (isset($_POST["tirage"])){
     </div>
 
     <main>
-    <div class="classification">
-            <img class="type" src="img/icones/Path_Destruction.webp" alt="">
-            <img class="type" src="img/icones/Path_The_Hunt.webp" alt="">
-            <img class="type" src="img/icones/Path_Erudition.webp" alt="">
-            <img class="type" src="img/icones/Path_Harmony.webp" alt="">
-            <img class="type" src="img/icones/Path_Nihility.webp" alt="">
-            <img class="type" src="img/icones/Path_Preservation.webp" alt="">
-            <img class="type" src="img/icones/Path_Abundance.webp" alt="">
-            <img class="type" src="img/icones/Path_Remembrance.webp" alt="">
-            <img class="type" src="img/icones/Path_Elation.webp" alt="">
+         <div class="classification">
+            <label for="Physical">
+                <input type="checkbox" name="Physical" id="Physical">
+                <img class="type" src="img/icones/Type_Physical.webp" alt="">
+            </label>
+            <label for="Fire">
+                <input type="checkbox" name="Fire" id="Fire">
+                <img class="type" src="img/icones/Type_Fire.webp" alt="">
+            </label>
+            <label for="Ice">
+                <input type="checkbox" name="Ice" id="Ice">
+                <img class="type" src="img/icones/Type_Ice.webp" alt="">
+            </label>
+            <label for="Imaginary">
+                <input type="checkbox" name="Imaginary" id="Imaginary">
+                <img class="type" src="img/icones/Type_Imaginary.webp" alt="">
+            </label>
+            <label for="Lightning">
+                <input type="checkbox" name="Lightning" id="Lightning">
+                <img class="type" src="img/icones/Type_Lightning.webp" alt="">
+            </label>
+            <label for="Quantum">
+                <input type="checkbox" name="Quantum" id="Quantum">
+                <img class="type" src="img/icones/Type_Quantum.webp" alt="">
+            </label>
+            <label for="Wind">
+                <input type="checkbox" name="Wind" id="Wind">
+                <img class="type" src="img/icones/Type_Wind.webp" alt="">
+            </label>
         </div>
-</main>
 
+        <div class="classification">
+            <label for="Destruction">
+                <input type="checkbox" name="Destruction" id="Destruction">
+                <img class="type" src="img/icones/Path_Destruction.webp" alt="">
+            </label>
+            <label for="Hunt">
+                <input type="checkbox" name="Hunt" id="Hunt">
+                <img class="type" src="img/icones/Path_The_Hunt.webp" alt="">
+            </label>
+            <label for="Erudition">
+                <input type="checkbox" name="Erudition" id="Erudition">
+                <img class="type" src="img/icones/Path_Erudition.webp" alt="">
+            </label>
+            <label for="Harmony">
+                <input type="checkbox" name="Harmony" id="Harmony">
+                <img class="type" src="img/icones/Path_Harmony.webp" alt="">
+            </label>
+            <label for="Nihility">
+                <input type="checkbox" name="Nihility" id="Nihility">
+                <img class="type" src="img/icones/Path_Nihility.webp" alt="">
+            </label>
+            <label for="Preservation">
+                <input type="checkbox" name="Preservation" id="Preservation">
+                <img class="type" src="img/icones/Path_Preservation.webp" alt="">
+            </label>
+             <label for="Abundance">
+                <input type="checkbox" name="Abundance" id="Abundance">
+                <img class="type" src="img/icones/Path_Abundance.webp" alt="">
+            </label>
+             <label for="Remembrance">
+                <input type="checkbox" name="Remembrance" id="Remembrance">
+                <img class="type" src="img/icones/Path_Remembrance.webp" alt="">
+            </label>
+             <label for="Elation">
+                <input type="checkbox" name="Elation" id="Elation">
+                <img class="type" src="img/icones/Path_Elation.webp" alt="">
+            </label>
+        </div>
+
+       <div class="filtreGrid">
+            <?php
+                if ($selection == "personnage")
+                    $table = $tablePersonnage;
+                else
+                    $table = $tableObtention;
+
+                foreach ($table as $key => $value) {
+                    $image = "<div class='" . $table[$key]['voie'] . " ";
+                    $image .= $table[$key]['type'] . "'>";
+                    $image .= "<img src='img/splash/Character_";
+                    $image .= str_replace(" ", "_", $table[$key]['nom']) . "_Splash_Art.webp'>";
+                    $image .= "</div>";
+                    echo $image;
+                }
+            ?>
+        </div>
+    </main>
+
+    <form action="<?php $_SERVER['PHP_SELF']?>" method="post">
+            <select name="selection" onchange=submit()>
+                <option value="obtention"
+                <?php if ($selection=="obtention"){
+                    echo "selected";
+                }?>>COLLECTION PERSONNELLE</option>
+                <option value="personnage" 
+                <?php if ($selection=="personnage"){
+                    echo "selected";
+                }?>>LISTE DES PERSONNAGES</option>
+            </select>
+
+            <label class="option
+            <?php if (in_array("double",$doublon))
+                echo "select"
+            ?>">
+                <input type="checkbox" name="doublon[]" value="double" onchange=submit()
+                <?php if (in_array("double",$doublon))
+                echo "checked";
+                ?>>
+                <div>DOUBLON</div>
+            </label>
+
+            <label class="option 
+            <?php if (in_array("4",$rarete))
+                echo "select"
+            ?>">
+            <input type="checkbox" name="rarete[]" value="4" onchange=submit()
+            <?php if (in_array("4", $rarete))
+                echo "checked";
+            ?>>
+            <div>4 STARS</div>
+            </label>
+
+            <label class="option
+            <?php if (in_array("5",$rarete))
+                echo "select"
+            ?>">
+            <input type="checkbox" name="rarete[]" value="5" onchange=submit()
+            <?php if (in_array("5",$rarete))
+                echo "checked";
+            ?>>
+            <div>5 STARS</div>
+            </label>
+        </form>
+     
 
     <!-- MENU OUVRANT FIXED -->
 
@@ -288,12 +386,7 @@ if (isset($_POST["tirage"])){
 
     <!-- PARTIE TIRAGE ANIMATION -->
 
-    <section class="screenPull hidden">
-            <div class="gate1"></div>
-            <div class="gate2"></div>
-    </section>
-
-    <script src="js/warp.js"></script>
+    <script src="js/inventory.js"></script>
 </body>
 
 </html>

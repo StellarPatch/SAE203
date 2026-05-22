@@ -3,7 +3,7 @@ body{
     background: linear-gradient(90deg,rgb(34, 34, 34),rgb(82, 82, 82));
     position: relative;
     font-family: DIN;
-    overflow:hidden;
+    overflow-x:hidden;
     cursor: url("../img/cursor.cur"),auto;
     
 }
@@ -354,6 +354,7 @@ main.animation{
 .classification{
     display: flex;
     margin: auto;
+    margin-top: 8px;
 }
 
 .type{
@@ -365,130 +366,60 @@ main.animation{
     transition: 0.2s;
 }
 
+label input{
+    display: none;
+}
+
 .type:hover{
     opacity: 100%;
 }
 
+.type:active{
+    opacity: 0.5;;
+}
+
+label:has(input:checked) > .type{
+    opacity: 100%;
+}
+
+.filtreGrid>div{display: none;}
+
+		.filtreGrid.Destruction>.Destruction,
+		.filtreGrid.Hunt>.Hunt,
+		.filtreGrid.Erudition>.Erudition,
+		.filtreGrid.Harmony>.Harmony,
+        .filtreGrid.Nihility>.Nihility,
+        .filtreGrid.Preservation>.Preservation,
+        .filtreGrid.Abundance>.Abundance,
+        .filtreGrid.Remembrance>.Remembrance,
+        .filtreGrid.Elation>.Elation,
+
+        .filtreGrid.Physical>.Physical,
+        .filtreGrid.Fire>.Fire,
+        .filtreGrid.Ice>.Ice,
+        .filtreGrid.Imaginary>.Imaginary,
+        .filtreGrid.Lightning>.Lightning,
+        .filtreGrid.Quantum>.Quantum,
+        .filtreGrid.Wind>.Wind
+        {
+			display: block;
+		}
+
+.filtreGrid{
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    margin: 32px 128px;
+}
+
+.filtreGrid div{
+    
+}
+
+.filtreGrid img {
+    width: 100%;
+}
+
 /* *********  bar des versions (à améliorer)  ********* */
-
-#barVersion{
-    position: absolute;
-    color: white;
-    left: 10vw;
-    top: 61px;
-    text-align: center;
-    background: rgb(71, 62, 62);
-    /* sosutraire la taille du header pour pouvoir overflow scroll jusqu'à la 1.0 */
-    height: calc(100vh - 61px);
-    width: 48px;
-
-    overflow-y: scroll;
-    scrollbar-width: none;
-    z-index: 1;
-}
-
-/* faire disparaitre quand ouvre menu sinon moche */
-
-#barVersion.inactive{
-    display: none;
-}
-
-/* ****************** contenu bannière ****************** */
-
-.container{
-    position: relative;
-    height: 40vh;
-    width: 60vw;
-    padding: 32px;
-    margin: auto;
-    display: flex;
-    align-items: center;
-    background: rgb(161, 161, 161);
-}
-
-/* partie gauche */
-
-.content{
-    position: relative;
-    background: linear-gradient(#fff,rgba(255,255,255,.7));
-    height: 50vh;
-    width: fit-content;
-    border-top-right-radius: 64px;
-    padding: 12px;
-}
-
-.content>.etiquette{
-    position: absolute;
-    top: 32px;
-    left: -16px;
-    width: fit-content;
-    background: #239ca9;
-    color: #fff;
-    padding: 8px 32px;
-}
-
-.containerVersionRelative{
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 16px;
-}
-
-/* vignettes des versions */
-
-.version{
-    margin: 4px;
-    padding: 4px;
-    background: url();
-    background-size: 300%;
-    background-repeat: no-repeat;
-    background-position: center;
-    color: rgb(255, 255, 255);
-    cursor: url("../img/cursor.cur"), pointer;
-}
-
-.version:hover{
-    opacity: 0.67;
-}
-
-#titreBanniere{
-    margin-left: 64px;
-    color: #000000;
-}
-
-/* partie droite */
-
-.mainPerso{
-    width: 40vw;
-    height: 40vw;
-    background-image: url("../img/splash/Character_Yunli_Splash_Art.webp");
-    background-size: 100%;
-    background-repeat: no-repeat;
-    background-position: center;
-}
-
-.sidePersoFlex{
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-}
-
-.sidePerso{
-    height: 30vh;
-    width: 6vw;
-    border-radius: 128px;
-    background-image: url("../img/splash/Character_Acheron_Splash_Art.webp");
-    background-size: 300%;
-    background-repeat: no-repeat;
-    background-position-x: center;
-    background-position-y: center;
-
-    border: #131313 0.5px solid;
-}
-
-/* Bas le bouton? */
 
 .btn{
     position: relative;
@@ -525,15 +456,43 @@ main.animation{
     color: #fff;
 }
 
+form{
+    position: fixed;
+    bottom: 0;
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 32px;
+}
+
 select{
     height: fit-content;
-    margin-top: 48px;
     padding: 8px 32px;
     border-radius: 16px;
     border: 1px #ffe385 solid;
     color: white;
     background: black;
     text-align: center;
+    width: fit-content;
+    cursor: url("../img/cursor.cur"),auto;
+}
+
+.option{
+    color: #676767;
+    cursor: url("../img/cursor.cur"),auto;
+}
+
+.option:hover{
+    color: #ffe385;
+}
+
+.option:active{
+    color: #676767;
+}
+
+.option.select{
+    color: #ffe385;
 }
 
 /* ****************************** PARTIE TIRAGE ANIMATION ****************************** */

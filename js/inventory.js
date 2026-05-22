@@ -16,53 +16,15 @@ var perso = "";
 out.addEventListener("click", menu);
 btnMenu.addEventListener("click", menu);
 
-document.addEventListener("DOMContentLoaded", () => {
-    requestAnimationFrame(() => {
-        main.classList.remove("animation");
-    });
-});
-//délais réduit
+document.querySelectorAll("input").forEach(e=>{
+			e.addEventListener("change", filtre);
+		})
 
-// applique transition lors de la sélection d'une nouvelle banière
-document.querySelectorAll("form").forEach(form => {
-    form.addEventListener("submit", e => {
-        e.preventDefault();
+function filtre(){
+			document.querySelector(".filtreGrid").classList.toggle(this.name);
+            
+}
 
-        var btn = e.submitter; // bouton réellement cliqué
-        var value = btn.value; // sa value
-
-        main.classList.add("animation");
-
-        setTimeout(() => {
-            // on recrée automatiquement la value du bouton
-            var hidden = document.createElement("input");
-            hidden.type = "hidden";
-            hidden.name = btn.name;
-            hidden.value = value;
-            form.appendChild(hidden);
-
-            form.submit(); //submit reset la value du click, donc obligé créer btn caché
-        }, 600);
-    });
-});
-
-// change l'image de mise en avant si plusieurS 5*
-select.addEventListener("change", e => {
-    var perso = e.target.value;
-    // console.log(perso)
-    const formatage = perso.replaceAll(" ", "_");
-    // changer l'image
-    mainCharacter.style.backgroundImage = "url('img/splash/Character_" + formatage + "_Splash_Art.webp')";
-    // envoyer la nouvelle info via l'URL pour connecter en PHP peut être
-    const url = new URL(window.location);
-    url.searchParams.set("perso", perso);
-    // "bloque le rechargement de la page"
-    history.pushState({}, "", url);
-});
-
-
-btnX1.addEventListener("click", tirage);
-btnX10.addEventListener("click", tirage);
 
 // function start() {
 //     // fait disparaitre "l'intro"

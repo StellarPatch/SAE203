@@ -16,36 +16,6 @@ var perso = "";
 out.addEventListener("click", menu);
 btnMenu.addEventListener("click", menu);
 
-document.addEventListener("DOMContentLoaded", () => {
-    requestAnimationFrame(() => {
-        main.classList.remove("animation");
-    });
-});
-//délais réduit
-
-// applique transition lors de la sélection d'une nouvelle banière
-document.querySelectorAll("form").forEach(form => {
-    form.addEventListener("submit", e => {
-        e.preventDefault();
-
-        var btn = e.submitter; // bouton réellement cliqué
-        var value = btn.value; // sa value
-
-        main.classList.add("animation");
-
-        setTimeout(() => {
-            // on recrée automatiquement la value du bouton
-            var hidden = document.createElement("input");
-            hidden.type = "hidden";
-            hidden.name = btn.name;
-            hidden.value = value;
-            form.appendChild(hidden);
-
-            form.submit(); //submit reset la value du click, donc obligé créer btn caché
-        }, 600);
-    });
-});
-
 // change l'image de mise en avant si plusieurS 5*
 select.addEventListener("change", e => {
     var perso = e.target.value;
@@ -54,12 +24,9 @@ select.addEventListener("change", e => {
     // changer l'image
     mainCharacter.style.backgroundImage = "url('img/splash/Character_" + formatage + "_Splash_Art.webp')";
     // envoyer la nouvelle info via l'URL pour connecter en PHP peut être
-    const url = new URL(window.location);
-    url.searchParams.set("perso", perso);
-    // "bloque le rechargement de la page"
-    history.pushState({}, "", url);
 });
 
+document.querySelector(".resultat").addEventListener("click", resultat)
 
 btnX1.addEventListener("click", tirage);
 btnX10.addEventListener("click", tirage);
@@ -85,10 +52,11 @@ function menu() {
     BarVersion.classList.toggle("inactive");
 }
 
+function resultat() {
+    this.classList.toggle("click");
+}
+
 function tirage() {
-    let params = new URLSearchParams(document.location.search);
-    let name = params.get("perso");
-    
     //console.log(name)
 
     main.classList.toggle("animation");
@@ -96,6 +64,6 @@ function tirage() {
     setTimeout(() => {
         document.querySelector(".screenPull").classList.toggle("hidden")
         document.querySelector(".gate1").classList.toggle("test")
-    },1000)
-    
+    }, 1000)
+
 }

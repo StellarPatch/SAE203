@@ -345,28 +345,9 @@ main.menu{
 
 /* faire slide lors changement de version */
 
-main.animation{
+/* main.animation{
     transform: translateY(100vh);
     transition: 1s;
-}
-
-/* AUTRE A UTILISER DANS INVENTAIRE */
-/* .classification{
-    display: flex;
-    margin: auto;
-}
-
-.type{
-    width: 48px;
-    opacity: 40%;
-    padding: 0 16px;
-    padding-bottom: 4px;
-    border-bottom: #ffffff solid 1px;
-    transition: 0.2s;
-}
-
-.type:hover{
-    opacity: 100%;
 } */
 
 /* *********  bar des versions (à améliorer)  ********* */
@@ -538,34 +519,16 @@ select{
 
 /* ****************************** PARTIE TIRAGE ANIMATION ****************************** */
 
-.screenPull{
-    background: rgb(255, 255, 255);
+.resultat{
     position: fixed;
-    left: 0;
-    top: 61px;
+    height: 100vh;
     width: 100vw;
-    height: calc(100vh - 61px);
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-    transition: 0s;
-    z-index: 1;
+    background: rgba(0,0,0,.8);
+    top: 0;
+    z-index: 99;
+    transition: 0.2s ease-out;
 }
 
-.screenPull.hidden{
-    clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
-}
-
-.gate1{
-    background: white;
-    width: 100vw;
-    height: 100%;
-    clip-path: polygon(100% 0, 0 0, 0 100%);
-    transition: 2s;
-}
-
-.gate1.test{
-    
-}
-
-.gate2{
-
+.resultat.click{
+    top: -100vh;
 }

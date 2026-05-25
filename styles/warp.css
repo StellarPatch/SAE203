@@ -355,13 +355,13 @@ main.menu{
 #barVersion{
     position: absolute;
     color: white;
-    left: 10vw;
+    left: 0vw;
     top: 61px;
     text-align: center;
     background: rgb(71, 62, 62);
     /* sosutraire la taille du header pour pouvoir overflow scroll jusqu'à la 1.0 */
     height: calc(100vh - 61px);
-    width: 48px;
+    width: 64px;
 
     overflow-y: scroll;
     scrollbar-width: none;
@@ -421,9 +421,9 @@ main.menu{
 
 .version{
     margin: 4px;
-    padding: 4px;
+    padding: 8px 16px;
     background: url();
-    background-size: 300%;
+    background-size: 200%;
     background-repeat: no-repeat;
     background-position: center;
     color: rgb(255, 255, 255);
@@ -526,9 +526,35 @@ select{
     background: rgba(0,0,0,.8);
     top: 0;
     z-index: 99;
+
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    justify-content: center;
+    align-items: center;
+    place-items: center;
+
     transition: 0.2s ease-out;
+    top: -100vh;
 }
 
 .resultat.click{
-    top: -100vh;
+    top: 0vh;
+}
+
+.character{
+    height: 200px;
+    width: 100px;
+    border-radius: 32px;
+    background-image: url("../img/splash/Character_Acheron_Splash_Art.webp");
+    background-size: 300%;
+    background-repeat: no-repeat;
+    background-position-x: center;
+    background-position-y: center;
+
+    border: #131313 0.5px solid;
+    transition: 0.5s ease;
+}
+
+.character.animation{
+    transform: translateY(-100vh);
 }

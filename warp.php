@@ -18,6 +18,8 @@ if (isset($_POST["click"])) {
     $click = $_POST["click"];
 } elseif (isset($_POST["tirage"])) {
     $click = $_POST["tirage"];
+} elseif (isset($_POST["tirage10"])) {
+    $click = $_POST["tirage10"];
 } else {
     $click = 0; //état initiale si rien set
 }
@@ -82,48 +84,55 @@ else
 
 $nb_ecriture = 0 ;
 
-if (isset($_POST["tirage"])) {
-    // création d'une variable avec un nombre aléatoire sur 100
-    $proba = random_int(1, 100);
+if (isset($_POST["tirage"]) || isset($_POST["tirage10"])) {
 
-    // condition pour avoir un perso 5* (15%)
-    if ($proba <= 15) {
-        $tirage = "SELECT id_personnage FROM personnage WHERE nom = '$altNom'";
-        $lectureTirage = lectureBDD($tirage);
-        $id_personnage = $lectureTirage[0]["id_personnage"];
-    } else
-    {   
-        // prend un perso 4* aléatoir parmis ceux dans $nom_str_4
-        $proba2 = random_int(0,count($nom_str_4)-1);
-
-        $tirage = "SELECT id_personnage FROM personnage WHERE nom = '$nom_str_4[$proba2]'";
-        $lectureTirage = lectureBDD($tirage);
-        $id_personnage = $lectureTirage[0]["id_personnage"];
-    }
-
-    // var_dump($nom_str_4);
-    //  var_dump($tirage);
-    // var_dump($lectureTirage[0]["id_personnage"]);
-
-    // Requête SQL
-    $insert = "INSERT INTO obtention (id_personnage, id_banniere)
-       VALUES ('$id_personnage', '$version')";
-
-    // echo $insert;
-
-
-    $nb_ecriture = ecritureBDD($insert);
-    if ($nb_ecriture == 1){
-
-        $resultat = 'SELECT * FROM obtention ORDER BY id_obtention DESC LIMIT 1';
-        $affichage = lectureBDD($resultat);
-    }
-    elseif ($nb_ecriture == 10){
-         $resultat = 'SELECT * FROM obtention ORDER BY id_obtention DESC LIMIT 10';
-        $affichage = lectureBDD($resultat);
-    }
+    // nombre de tirages
+    if (isset($_POST["tirage"]))
+        $nbTirages = 1 ;
     else
-        $erreur = "Echec lors de l'enregistrement du personnage $nom_str_4[$proba2]";
+        $nbTirages = 10 ;
+
+    $affichage = array();
+
+    for ($i = 0; $i < $nbTirages; $i++) {
+
+        // création d'une variable avec un nombre aléatoire sur 100
+        $proba = random_int(1, 100);
+
+        // condition pour avoir un perso 5* (15%)
+        if ($proba <= 10) {
+
+            $tirage = "SELECT id_personnage FROM personnage WHERE nom = '$altNom'";
+            $lectureTirage = lectureBDD($tirage);
+            $id_personnage = $lectureTirage[0]["id_personnage"];
+
+        } else
+        {   
+            // prend un perso 4* aléatoir parmis ceux dans $nom_str_4
+            $proba2 = random_int(0,count($nom_str_4)-1);
+
+            $tirage = "SELECT id_personnage FROM personnage WHERE nom = '$nom_str_4[$proba2]'";
+            $lectureTirage = lectureBDD($tirage);
+            $id_personnage = $lectureTirage[0]["id_personnage"];
+        }
+
+            // var_dump($nom_str_4);
+            //  var_dump($tirage);
+            // var_dump($lectureTirage[0]["id_personnage"]);
+
+            // Requête SQL
+            $insert = "INSERT INTO obtention (id_personnage, id_banniere)
+            VALUES ('$id_personnage', '$version')";
+
+            // echo $insert;
+
+            $nb_ecriture += ecritureBDD($insert);
+
+    }
+
+    // récupérer les derniers tirages
+    $resultat = "SELECT * FROM obtention ORDER BY id_obtention DESC LIMIT $nbTirages";
+    $affichage = lectureBDD($resultat);
 
     // var_dump($affichage);
 }
@@ -152,22 +161,21 @@ if (isset($_POST["tirage"])) {
         </a>
 
         <div class="iconFlex"> <!--//commentaire ajouter si je veux remettre l'animation icones -->
-            <div class="icon <!--translate-->">
+            <a class="icon <!--translate-->" href="index.html"> 
                 <img src="img/icones/event.png" alt="">
-            </div>
-            <div class="icon <!--translate-->">
+            </a>
+            <a class="icon <!--translate-->" href="warp.php">
                 <img src="img/icones/gacha.png" alt="">
-            </div>
-            <div class="icon <!--translate-->">
+            </a>
+            <a class="icon <!--translate-->" href="meme.html">
                 <img src="img/icones/adventure.png" alt="">
-            </div>
-            <div class="icon <!--translate-->">
-                <img src="img/icones/team.png" alt="">
-            </div>
-            <div class="icon <!--translate-->">
+            </a>
+            <a class="icon <!--translate-->" href="inventory.php">
+                <img src="img/icones/inventory.png" alt="">
+            </a>
+            <a class="icon <!--translate-->" href="profile.html">
                 <img src="img/icones/profil.png" alt="">
-            </div>
-
+            </a>
         </div>
     </header>
 
@@ -175,12 +183,12 @@ if (isset($_POST["tirage"])) {
         <section id="monnaieFlex">
             <div class="monnaie">
                 <img src="img/icones/Item_Special_Pass.webp" alt="">
-                7
+                ∞
             </div>
 
             <div class="monnaie">
                 <img src="img/icones/Item_Stellar_Jade.webp" alt="">
-                7226
+                ∞
             </div>
         </section>
     </div>
@@ -277,7 +285,12 @@ if (isset($_POST["tirage"])) {
             }
             ?>
 
-            <button class="btn">
+            <button class="btn" name="tirage10" value=<?php
+            if (isset($_POST['click']))
+                echo $_POST['click'];
+            else
+                echo 0;
+            ?>>
                 <img src="img/btn.apng" alt="">
                 <img src="img/frameBtn.webp" alt="">
                 <div><b>x10 Tirage</b></div>
@@ -304,7 +317,7 @@ if (isset($_POST["tirage"])) {
         <!-- CONTENU -->
         <div class="phoneFlex">
             <div id="UID">UID 700499164</div>
-            <div>Insert Icones</div>
+            <div></div>
         </div>
 
         <div class="phoneFlex align">
@@ -339,13 +352,13 @@ if (isset($_POST["tirage"])) {
                 <div>Carnet de voyage</div>
             </div>
             <div><img src="img/icones/Icon_Synthesis.webp" alt="">Synthèse</div>
-            <div><img src="img/icones/Icon_Store.webp" alt="">Succès</div>
-            <div><img src="img/icones/Icon_Store.webp" alt="">Messages<br></div>
-            <div class="smallFont"><img src="img/icones/Icon_Nameless_Honor.webp" alt="">Honneur <br> Sans Noms</div>
-            <div class="case"><img src="img/icones/Icon_Warp.webp" alt="">Saut hyperespace</div>
+            <div><img src="img/icones/Icon_Consumables.webp" alt="">Substances</div>
+            <div><img src="img/icones/Icon_Data_Bank.webp" alt="">Banque de<br>données</div>
+            <div><img src="img/icones/Icon_Nameless_Honor.webp" alt="">Honneur <br>Sans_Noms</div>
+            <div><img src="img/icones/Icon_Warp.webp" alt="">Saut hyperespace</div>
             <div><img src="img/icones/profil.png" alt="">Personnages<br></div>
-            <div><img src="img/icones/Icon_Store.webp" alt="">Guide interastral</div>
-            <div><img src="img/icones/Icon_Store.webp" alt="">Mode multijoueur</div>
+            <div><img src="img/icones/Icon_Bookshelf.webp" alt="">Bibliothèque</div>
+            <div><img src="img/icones/UI_Mission.webp" alt="">Missions</div>
             <div><img src="img/icones/Icon_Navigation.webp" alt="">Navigation</div>
             <div><img src="img/icones/Icon_Tutorials.webp" alt="">Tutoriels</div>
         </div>
@@ -361,12 +374,11 @@ if (isset($_POST["tirage"])) {
     <!-- PARTIE TIRAGE -->
     <?php
     if ($nb_ecriture > 0){
-        $obtention = "<section class='resultat'>";
+        $obtention = "<section class='resultat click'>";
 
-        if ($nb_ecriture == 1){
-
+        for ($i=0; $i < $nb_ecriture; $i++) { 
             // Récupérer l'id du personnage tiré
-            $idPerso = $affichage[0]['id_personnage'];
+            $idPerso = $affichage[$i]['id_personnage'];
 
             // Construire et exécuter la requête SQL
             $affichagePersoSQL = "SELECT nom FROM personnage WHERE id_personnage = $idPerso";
@@ -376,35 +388,13 @@ if (isset($_POST["tirage"])) {
             $nomPerso = $affichagePersoTableau[0]['nom'];
 
             // Construire l'affichage
-            $sideCharacter  = "<div class='sidePerso' ";
-            $sideCharacter .= 'style="background-image:url(\'img/splash/Character_' 
+            $character  = "<div class='character animation' ";
+            $character .= 'style="background-image:url(\'img/splash/Character_' 
                             . str_replace(" ", "_", $nomPerso) 
                             . '_Splash_Art.webp\')">';
-            $sideCharacter .= "</div>";
+            $character .= "</div>";
 
-            $obtention .= $sideCharacter;
-        }
-
-        if ($nb_ecriture == 10){
-            
-            // Récupérer l'id du personnage tiré
-            $idPerso = $affichage[0]['id_personnage'];
-
-            // Construire et exécuter la requête SQL
-            $affichagePersoSQL = "SELECT nom FROM personnage WHERE id_personnage = $idPerso";
-            $affichagePersoTableau = lectureBDD($affichagePersoSQL);
-
-            // Récupérer le nom
-            $nomPerso = $affichagePersoTableau[0]['nom'];
-
-            // Construire l'affichage
-            $sideCharacter  = "<div class='sidePerso' ";
-            $sideCharacter .= 'style="background-image:url(\'img/splash/Character_' 
-                            . str_replace(" ", "_", $nomPerso) 
-                            . '_Splash_Art.webp\')">';
-            $sideCharacter .= "</div>";
-
-            $obtention .= $sideCharacter;
+            $obtention .= $character;
         }
 
         $obtention .= "</section>";

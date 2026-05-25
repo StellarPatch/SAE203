@@ -2,7 +2,10 @@
 
     require "fonctions_BDD.php";
   // ****** ACCES AUX DONNEES ******
-    $bdd = connexionBDD();
+    
+  $reset = "TRUNCATE TABLE obtention";
+  if (isset($_POST["reset"]))
+    ecritureBDD($reset);
 
     // DEFINITION $OPTION DOUBLON
     
@@ -26,42 +29,49 @@
     else {
         $rarete = array();}
 
+    if (isset($_POST["alphabet"])) {
+        $alphabet = $_POST["alphabet"];
+    } else {
+        $alphabet = "ASC";} 
+
+// var_dump($alphabet);
+
 //////////////////////////////////// REQUETE 1 ///////////////////////////////////////////
 
 if (!empty($doublon)) // PAS DE DOUBLON ET RIEN COCHER
     {
         if (empty($rarete) || (in_array("4", $rarete) && in_array("5", $rarete))){
             $reponse = "SELECT personnage.id_personnage, nom, type, voie, rarete FROM personnage 
-            INNER JOIN obtention ON personnage.id_personnage = obtention.id_personnage ORDER BY nom ASC";
+            INNER JOIN obtention ON personnage.id_personnage = obtention.id_personnage ORDER BY nom $alphabet";
         }
         else
             {
                 if (in_array("4" , $rarete)) // SI UNIQUEMENT 4*
                     $reponse = "SELECT personnage.id_personnage, nom, type, voie, rarete FROM personnage 
                                 INNER JOIN obtention ON personnage.id_personnage = obtention.id_personnage 
-                                WHERE rarete = '4' ORDER BY nom ASC";
+                                WHERE rarete = '4' ORDER BY nom $alphabet";
                 if (in_array("5" , $rarete)) // SI UNIQUEMENT 5*
                     $reponse = "SELECT personnage.id_personnage, nom, type, voie, rarete FROM personnage 
                                 INNER JOIN obtention ON personnage.id_personnage = obtention.id_personnage 
-                                WHERE rarete = '5' ORDER BY nom ASC";
+                                WHERE rarete = '5' ORDER BY nom $alphabet";
             }
     }
   else
     {
     if (empty($rarete) || (in_array("4", $rarete) && in_array("5", $rarete))){
             $reponse = "SELECT DISTINCT personnage.id_personnage, nom, type, voie, rarete FROM personnage 
-            INNER JOIN obtention ON personnage.id_personnage = obtention.id_personnage ORDER BY nom ASC";
+            INNER JOIN obtention ON personnage.id_personnage = obtention.id_personnage ORDER BY nom $alphabet";
         }
         else
             {
                 if (in_array("4" , $rarete))
                     $reponse = "SELECT DISTINCT personnage.id_personnage, nom, type, voie, rarete FROM personnage 
                                 INNER JOIN obtention ON personnage.id_personnage = obtention.id_personnage 
-                                WHERE rarete = '4' ORDER BY nom ASC"; // SI UNIQUEMENT 4*
+                                WHERE rarete = '4' ORDER BY nom $alphabet"; // SI UNIQUEMENT 4*
                 if (in_array("5" , $rarete))
                     $reponse = "SELECT DISTINCT personnage.id_personnage, nom, type, voie, rarete FROM personnage 
                                 INNER JOIN obtention ON personnage.id_personnage = obtention.id_personnage 
-                                WHERE rarete = '5' ORDER BY nom ASC"; // SI UNIQUEMENT 5*
+                                WHERE rarete = '5' ORDER BY nom $alphabet"; // SI UNIQUEMENT 5*
             }
     } 
 
@@ -71,31 +81,31 @@ if (!empty($doublon)) // PAS DE DOUBLON ET RIEN COCHER
     {
         if (empty($rarete) || (in_array("4", $rarete) && in_array("5", $rarete))){
             $reponse2 = "SELECT personnage.id_personnage, nom, type, voie, rarete FROM personnage 
-            ORDER BY nom ASC";
+            ORDER BY nom $alphabet";
         }
         else
             {
                 if (in_array("4" , $rarete))
                     $reponse2 = "SELECT personnage.id_personnage, nom, type, voie, rarete FROM personnage 
-                                WHERE rarete = '4' ORDER BY nom ASC"; // SI UNIQUEMENT 4*
+                                WHERE rarete = '4' ORDER BY nom $alphabet"; // SI UNIQUEMENT 4*
                 if (in_array("5" , $rarete))
                     $reponse2 = "SELECT personnage.id_personnage, nom, type, voie, rarete FROM personnage 
-                                WHERE rarete = '5' ORDER BY nom ASC"; // SI UNIQUEMENT 5*
+                                WHERE rarete = '5' ORDER BY nom $alphabet"; // SI UNIQUEMENT 5*
             }
     }
     else
     {
     if (empty($rarete) || (in_array("4", $rarete) && in_array("5", $rarete))){
-            $reponse2 = "SELECT DISTINCT personnage.id_personnage, nom, type, voie, rarete FROM personnage";
+            $reponse2 = "SELECT DISTINCT personnage.id_personnage, nom, type, voie, rarete FROM personnage ORDER BY nom $alphabet";
         }
         else
             {
                 if (in_array("4" , $rarete))
                     $reponse2 = "SELECT DISTINCT personnage.id_personnage, nom, type, voie, rarete FROM personnage 
-                                WHERE rarete = '4' ORDER BY nom ASC"; // SI UNIQUEMENT 4*
+                                WHERE rarete = '4' ORDER BY nom $alphabet"; // SI UNIQUEMENT 4*
                 if (in_array("5" , $rarete))
                     $reponse2 = "SELECT DISTINCT personnage.id_personnage, nom, type, voie, rarete FROM personnage
-                                WHERE rarete = '5' ORDER BY nom ASC"; // SI UNIQUEMENT 5*
+                                WHERE rarete = '5' ORDER BY nom $alphabet"; // SI UNIQUEMENT 5*
             }
     } 
   
@@ -141,22 +151,21 @@ if (!empty($doublon)) // PAS DE DOUBLON ET RIEN COCHER
         </a>
 
         <div class="iconFlex"> <!--//commentaire ajouter si je veux remettre l'animation icones -->
-            <div class="icon <!--translate-->">
+            <a class="icon <!--translate-->" href="index.html"> 
                 <img src="img/icones/event.png" alt="">
-            </div>
+            </a>
             <a class="icon <!--translate-->" href="warp.php">
                 <img src="img/icones/gacha.png" alt="">
             </a>
-            <div class="icon <!--translate-->">
+            <a class="icon <!--translate-->" href="meme.html">
                 <img src="img/icones/adventure.png" alt="">
-            </div>
-            <div class="icon <!--translate-->">
-                <img src="img/icones/team.png" alt="">
-            </div>
-            <div class="icon <!--translate-->">
+            </a>
+            <a class="icon <!--translate-->" href="inventory.php">
+                <img src="img/icones/inventory.png" alt="">
+            </a>
+            <a class="icon <!--translate-->" href="profile.html">
                 <img src="img/icones/profil.png" alt="">
-            </div>
-
+            </a>
         </div>
     </header>
 
@@ -164,12 +173,12 @@ if (!empty($doublon)) // PAS DE DOUBLON ET RIEN COCHER
         <section id="monnaieFlex">
             <div class="monnaie">
                 <img src="img/icones/Item_Special_Pass.webp" alt="">
-                7
+                ∞
             </div>
 
             <div class="monnaie">
                 <img src="img/icones/Item_Stellar_Jade.webp" alt="">
-                7226
+                ∞
             </div>
         </section>
     </div>
@@ -255,8 +264,8 @@ if (!empty($doublon)) // PAS DE DOUBLON ET RIEN COCHER
                 foreach ($table as $key => $value) {
                     $image = "<div class='" . $table[$key]['voie'] . " ";
                     $image .= $table[$key]['type'] . "'>";
-                    $image .= "<img src='img/splash/Character_";
-                    $image .= str_replace(" ", "_", $table[$key]['nom']) . "_Splash_Art.webp'>";
+                    $image .= "<img src='img/characterIcon/Character_";
+                    $image .= str_replace(" ", "_", $table[$key]['nom']) . "_Icon.webp'>";
                     $image .= "</div>";
                     echo $image;
                 }
@@ -308,6 +317,29 @@ if (!empty($doublon)) // PAS DE DOUBLON ET RIEN COCHER
             ?>>
             <div>5 STARS</div>
             </label>
+            
+            <label class="option <?php
+            if ($alphabet == "DESC")
+                echo "select";
+            ?>">
+            <input type="checkbox" name="alphabet" 
+            value=<?php 
+            if ($alphabet == "ASC")
+                echo "DESC";
+            else
+                echo "ASC";
+            ?> onchange=submit()>
+            <div>
+                <?php 
+                if ("DESC" == $alphabet){
+                    echo "Z-A";}
+                else
+                    {echo "A-Z";}
+                ?>
+            </div>
+            </label>
+
+            <button class="reset" name="reset" value="1">REINITIALISATION</button>
         </form>
      
 
@@ -323,14 +355,14 @@ if (!empty($doublon)) // PAS DE DOUBLON ET RIEN COCHER
             </section>
             <section id="lieu">
                 <li>
-                    <div>inventory</div>
+                    <div>Inventaire</div>
                 </li>
             </section>
         </div>
         <!-- CONTENU -->
         <div class="phoneFlex">
             <div id="UID">UID 700499164</div>
-            <div>Insert Icones</div>
+            <div></div>
         </div>
 
         <div class="phoneFlex align">
@@ -365,13 +397,13 @@ if (!empty($doublon)) // PAS DE DOUBLON ET RIEN COCHER
                 <div>Carnet de voyage</div>
             </div>
             <div><img src="img/icones/Icon_Synthesis.webp" alt="">Synthèse</div>
-            <div><img src="img/icones/Icon_Store.webp" alt="">Succès</div>
-            <div><img src="img/icones/Icon_Store.webp" alt="">Messages<br></div>
-            <div class="smallFont"><img src="img/icones/Icon_Nameless_Honor.webp" alt="">Honneur <br> Sans Noms</div>
-            <div class="case"><img src="img/icones/Icon_Warp.webp" alt="">Saut hyperespace</div>
+            <div><img src="img/icones/Icon_Consumables.webp" alt="">Substances</div>
+            <div><img src="img/icones/Icon_Data_Bank.webp" alt="">Banque de<br>données</div>
+            <div><img src="img/icones/Icon_Nameless_Honor.webp" alt="">Honneur <br>Sans_Noms</div>
+            <div><img src="img/icones/Icon_Warp.webp" alt="">Saut hyperespace</div>
             <div><img src="img/icones/profil.png" alt="">Personnages<br></div>
-            <div><img src="img/icones/Icon_Store.webp" alt="">Guide interastral</div>
-            <div><img src="img/icones/Icon_Store.webp" alt="">Mode multijoueur</div>
+            <div><img src="img/icones/Icon_Bookshelf.webp" alt="">Bibliothèque</div>
+            <div><img src="img/icones/UI_Mission.webp" alt="">Missions</div>
             <div><img src="img/icones/Icon_Navigation.webp" alt="">Navigation</div>
             <div><img src="img/icones/Icon_Tutorials.webp" alt="">Tutoriels</div>
         </div>

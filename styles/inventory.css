@@ -415,17 +415,19 @@ label:has(input:checked) > .type{
 
 .filtreGrid{
     display: grid;
-    grid-template-columns: repeat(8, 1fr);
+    grid-template-columns: repeat(24, 1fr);
     margin: 32px 128px;
     cursor: url("../img/cursor.cur"), pointer;
+    gap: 4px;
 }
 
 .filtreGrid div{
-    
+    border-radius: 4px;
 }
 
 .filtreGrid img {
     width: 100%;
+    border-radius: 100%;
 }
 
 /* *********  bar des versions (à améliorer)  ********* */
@@ -503,6 +505,17 @@ select{
 
 .option.select{
     color: #ffe385;
+}
+
+.reset{
+    background: none;
+    border-radius: 32px;
+    padding: 8px 16px;
+    color: #676767;
+}
+
+.reset:hover{
+    color: red;
 }
 
 /* ****************************** PARTIE TIRAGE ANIMATION ****************************** */

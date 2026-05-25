@@ -52,8 +52,16 @@
     </div>
 
     <main>
-        <model-viewer id="model" src="3dModel/stelle_star_rail.glb" auto-rotate>
+        <div>
+            <model-viewer id="model" src="3dModel/stelle_star_rail.glb" auto-rotate>
+        </div>
 
+        <div>
+            <!-- OPTION MUSIC -->
+            <select name="Audio" id="Audio" onchange="audio()">
+                <option value="false">None Music</option>
+            </select>
+        </div>
 
 
     </main>
@@ -124,6 +132,10 @@
         </div>
     </section>
 
+
+     <div id="ListeAudio">
+        <audio id="audio0" src="sfx/music/Perfect Idol.mp3"></audio>
+    </div>
     <!-- <div class="relative">
         <section id="intro">
             <img id="logo" src="img/Logo.png" alt="Logo" draggable="false">

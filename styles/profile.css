@@ -333,7 +333,8 @@ img{
 
 main{
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    /* flex-direction: column; */
     margin-top: 48px;
     transition: 0.2s;
 }
@@ -410,7 +411,6 @@ main.menu{
     /* background: url("../img/World_Path_Space.webp") rgba(0,0,0,0.4);
     background-size: 100%;
     background-repeat: no-repeat; */
-    border-radius: 100px;
 }
 
 

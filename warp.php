@@ -1,9 +1,8 @@
 <?php
 
 require "fonctions_BDD.php";
-// ****** ACCES AUX DONNEES ******
-$bdd = connexionBDD();
 
+// ****** ACCES AUX DONNEES ******
 // Envoi des requêtes pour récupérer les tables/association
 $reponse = "SELECT id_banniere, version_sortie, nom_banniere FROM banniere";
 $reponse2 = "SELECT id_personnage, nom, type, voie, rarete FROM personnage";
@@ -14,6 +13,7 @@ $tableBanniere = lectureBDD($reponse);
 $tablePersonnage = lectureBDD($reponse2);
 $associationAppartenir = lectureBDD($reponse3);
 
+// état si changer de bannière, ou fait un tirage
 if (isset($_POST["click"])) {
     $click = $_POST["click"];
 } elseif (isset($_POST["tirage"])) {
@@ -32,6 +32,9 @@ $version = $tableBanniere[$click]['id_banniere']; //prend la version initiale
 $reponse4 = "SELECT id_personnage,rarete FROM appartenir WHERE id_banniere = '$version'";
 $personnage = lectureBDD($reponse4); //liste des personnages de la bannière
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////// RECUPERER LES NOMS DES PERSONNAGES 4* DE LA BANNIERE /////////////////////// 
+
 // 1) Stocker les id des perso 4*
 $reponse5 = "SELECT id_personnage FROM appartenir WHERE id_banniere = '$version' AND rarete=4";
 $personnage_4 = lectureBDD($reponse5); //liste des personnages 4* de la bannière
@@ -54,6 +57,9 @@ foreach ($nom_id_4 as $key => $value) {
 ;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////// RECUPERER LES NOMS DES PERSONNAGES 5* DE LA BANNIERE /////////////////////// 
+
 // 1) Stocker les id des perso 5*
 $reponse6 = "SELECT id_personnage FROM appartenir WHERE id_banniere = '$version' AND rarete=5";
 $personnage_5 = lectureBDD($reponse6); //liste des personnages 5* de la bannière
@@ -78,11 +84,13 @@ foreach ($nom_id_5 as $key => $value) {
 // TRAITEMENT DU FORMULAIRE
 // Initialisation des variables du select
 if (!empty($_POST["altNom"]))
-    $altNom = $_POST["altNom"];
+    $altNom = $_POST["altNom"]; //PREND CELUI SELECTIONNER AVANT LE SUBMIT DU TIRAGE
 else
-    $altNom = $nom_str_5[count($nom_str_5) - 1];
+    $altNom = $nom_str_5[count($nom_str_5) - 1]; //PREND LE DERNIER 5* DE LA BANNIERE
 
 $nb_ecriture = 0 ;
+
+//////////////////////////////// ZONE DU TIRAGE //////////////////////////////
 
 if (isset($_POST["tirage"]) || isset($_POST["tirage10"])) {
 
@@ -99,7 +107,7 @@ if (isset($_POST["tirage"]) || isset($_POST["tirage10"])) {
         // création d'une variable avec un nombre aléatoire sur 100
         $proba = random_int(1, 100);
 
-        // condition pour avoir un perso 5* (15%)
+        // condition pour avoir un perso 5* (10%)
         if ($proba <= 10) {
 
             $tirage = "SELECT id_personnage FROM personnage WHERE nom = '$altNom'";
@@ -130,7 +138,7 @@ if (isset($_POST["tirage"]) || isset($_POST["tirage10"])) {
 
     }
 
-    // récupérer les derniers tirages
+    // récupérer les derniers tirages (check les derniers ajouter à l'association obtention)
     $resultat = "SELECT * FROM obtention ORDER BY id_obtention DESC LIMIT $nbTirages";
     $affichage = lectureBDD($resultat);
 
@@ -193,12 +201,13 @@ if (isset($_POST["tirage"]) || isset($_POST["tirage10"])) {
         </section>
     </div>
 
+    <!-- ---------------------------- COLONNE VERTICAL DES BANNIERE ---------------------------- -->
     <form id="barVersion" action="<?= $_SERVER['PHP_SELF'] ?>" method="post">
         <div class="containerVersionRelative">
             <?php foreach ($tableBanniere as $key => $value) {
                 $id_banniere = $value["id_banniere"];
 
-                // Récupérer le dernier perso 5* de la bannière
+                // Récupérer le dernier perso 5* de la bannière pour le mettre en arrière plan
                 $requete = "
                 SELECT p.nom FROM appartenir AS a
                 INNER JOIN personnage AS p ON p.id_personnage = a.id_personnage
@@ -218,10 +227,11 @@ if (isset($_POST["tirage"]) || isset($_POST["tirage10"])) {
         </div>
     </form>
 
+    <!-- ------------------------------- ZONE PRINCIPALE ------------------------------ -->
     <main class="animation">
 
         <section class="container">
-
+            <!-- ---------------- ZONE GAUCHE ------------------ -->
             <section class="content">
                 <div class="etiquette">
                     <?php echo $version; ?>
@@ -231,6 +241,7 @@ if (isset($_POST["tirage"]) || isset($_POST["tirage10"])) {
                     <?php echo $titre; ?>
                 </h2>
 
+                <!-- AFFICHAGE DYNAMIQUE DES PERSO 4* EN FCT DE CEUX DE LA BANNIERE -->
                 <div class="sidePersoFlex">
                     <?php foreach ($nom_str_4 as $key => $value) {
                         $sideCharacter = "<div class='sidePerso'";
@@ -240,29 +251,26 @@ if (isset($_POST["tirage"]) || isset($_POST["tirage10"])) {
                     }
                     ; ?>
                 </div>
-
             </section>
 
 
+            <!-- ---------------- ZONE DROITE ------------------ -->
             <!-- section image du perso principale de l'event -->
             <section class="mainPerso" <?php
-            echo 'style="background-image:url(\'img/splash/Character_' . str_replace(" ", "_", $nom_str_5[count($nom_str_5) - 1]) . '_Splash_Art.webp\')"';
+            echo 'style="background-image:url(\'img/splash/Character_' . str_replace(" ", "_", $altNom) . '_Splash_Art.webp\')"';
             // prend le dernier dans le tableau
+            // var_dump($altNom);
             ?>>
 
                 <!-- str_replace pour formater le nom dans l'entité banniere au fichier -->
             </section>
         </section>
 
-        <form class="btnFlex" action="<?= $_SERVER['PHP_SELF'] ?>" method="post">
-            <!-- éviter de mettre un autre form sinon trop galère -->
 
-            <button class="btn" name="tirage" value=<?php
-            if (isset($_POST['click']))
-                echo $_POST['click'];
-            else
-                echo 0;
-            ?>>
+        <!-- -------------------------------- INTERACTION & MODIFICATION BDD ------------------------------------ -->
+        <form class="btnFlex" action="<?= $_SERVER['PHP_SELF'] ?>" method="post">
+
+            <button class="btn" name="tirage" value=<?php echo $click;?>>
                 <img src="img/btn.apng" alt="">
                 <img src="img/frameBtn.webp" alt="">
                 <div><b>x1 Tirage</b></div>
@@ -273,24 +281,22 @@ if (isset($_POST["tirage"]) || isset($_POST["tirage10"])) {
 
             <?php if (count($nom_str_5) > 1) {
                 echo '<select name="altNom" action="<?= $_SERVER[\'PHP_SELF\'] ?>" method="post">';
-
+                // pour chaque nom de perso 5*, si c'est pas celui sélectionner ne pas mettre select
                 foreach ($nom_str_5 as $key => $value) {
-                    if ($key == (count($nom_str_5) - 1)) // si c'est le dernier dans la liste
-                        echo "<option value='$value' selected>$value</option>";
+
+                    if ($value == $altNom)
+                        $selected = "selected";
                     else
-                        echo "<option value='$value'>$value</option>";
+                        $selected = "";
+
+                    echo "<option value='$value' $selected>$value</option>";
                 }
 
                 echo "</select>";
             }
             ?>
 
-            <button class="btn" name="tirage10" value=<?php
-            if (isset($_POST['click']))
-                echo $_POST['click'];
-            else
-                echo 0;
-            ?>>
+            <button class="btn" name="tirage10" value=<?php echo $click; ?>>
                 <img src="img/btn.apng" alt="">
                 <img src="img/frameBtn.webp" alt="">
                 <div><b>x10 Tirage</b></div>
@@ -371,13 +377,13 @@ if (isset($_POST["tirage"]) || isset($_POST["tirage10"])) {
         </section>
     </div> -->
 
-    <!-- PARTIE TIRAGE -->
+    <!-- ----------------------- PARTIE TIRAGE ------------------------- -->
     <?php
-    if ($nb_ecriture > 0){
+    if ($nb_ecriture > 0){ // Si il y a eu une modification dans la BDD = montrer un résultat du tirage
         $obtention = "<section class='resultat click'>";
 
         for ($i=0; $i < $nb_ecriture; $i++) { 
-            // Récupérer l'id du personnage tiré
+            // Récupérer l'id du personnage tiré (n derniers)
             $idPerso = $affichage[$i]['id_personnage'];
 
             // Construire et exécuter la requête SQL

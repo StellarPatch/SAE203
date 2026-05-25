@@ -2,11 +2,20 @@ html{
     cursor: url("../img/cursor.cur"), pointer;
 }
 
+html:hover{
+    cursor: url("../img/cursor.cur"), pointer;
+}
+
 body{
     margin: 0;
     background: linear-gradient(90deg,rgb(34, 34, 34),rgb(82, 82, 82));
     font-family: DIN;
     overflow:hidden;
+}
+
+@font-face{
+    font-family: DIN;
+    src: url("../fonts/D-DIN.ttf");
 }
 
 /* ********************************  INTRO  ********************************** */
@@ -342,24 +351,6 @@ main.menu{
     translate: 200px;
 }
 
-.classification{
-    display: flex;
-    margin: auto;
-}
-
-.type{
-    width: 48px;
-    opacity: 40%;
-    padding: 0 16px;
-    padding-bottom: 4px;
-    border-bottom: #ffffff solid 1px;
-    transition: 0.2s;
-}
-
-.type:hover{
-    opacity: 100%;
-}
-
 .content{
     position: relative;
     background: linear-gradient(#fff,rgba(255,255,255,.7));
@@ -437,7 +428,7 @@ main.menu{
     clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
 }
 
-/* alignement asymétrique */
+/* alignement asymétrique (merci pour ce cours) */
 
 .planet:nth-child(2n){
     margin-top: 128px;
@@ -456,10 +447,4 @@ main.menu{
 .planet.selected{
     opacity: 1;
     border-radius: 100%;
-}
-
-
-@font-face{
-    font-family: DIN;
-    src: url("../fonts/D-DIN.ttf");
 }

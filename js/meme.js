@@ -1,18 +1,18 @@
-// initialisation des variables
+/////////////////////////////////// INITIALISATION DES VARIABLES ////////////////////////////////////////
 
 const intro = document.querySelector(".relative"); //layer intro
 const btnMenu = document.querySelector("#btnMenu");
 const Menu = document.getElementById("menu");
 const out = document.querySelector(".out");
 const main = document.querySelector("main");
-const btnTravel = document.querySelector("main>.btn");
 
-var planet = null;
+/////////////////////////////////// ZONE EVENT ////////////////////////////////////////
 
 // intro.addEventListener("click", start);
 out.addEventListener("click", menu);
 btnMenu.addEventListener("click", menu);
 
+/////////////////////////////////// ZONE FONCTIONS ////////////////////////////////////////
 
 // function start() {
 //     // fait disparaitre "l'intro"

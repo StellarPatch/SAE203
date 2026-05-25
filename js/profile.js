@@ -1,4 +1,4 @@
-// initialisation des variables
+/////////////////////////////////// INITIALISATION DES VARIABLES ////////////////////////////////////////
 
 // const intro = document.querySelector(".relative"); //layer intro
 const btnMenu = document.querySelector("#btnMenu");
@@ -6,7 +6,11 @@ const Menu = document.getElementById("menu");
 const out = document.querySelector(".out");
 const main = document.querySelector("main");
 
+/////////////////////////////////// ZONE EVENTS ////////////////////////////////////////
+
 btnMenu.addEventListener("click", menu);
+
+/////////////////////////////////// ZONE FONCTIONS ////////////////////////////////////////
 
 function start() {
     // fait disparaitre "l'intro"

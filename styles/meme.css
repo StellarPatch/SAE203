@@ -2,10 +2,19 @@ html{
     cursor: url("../img/cursor.cur"), pointer;
 }
 
+html:hover{
+    cursor: url("../img/cursor.cur"), pointer;
+}
+
 body{
     margin: 0;
     background: linear-gradient(90deg,rgb(34, 34, 34),rgb(82, 82, 82));
     font-family: DIN;
+}
+
+@font-face{
+    font-family: DIN;
+    src: url("../fonts/D-DIN.ttf");
 }
 
 /* ********************************  INTRO  ********************************** */
@@ -364,7 +373,7 @@ main.menu{
     color: #fff;
 }
 
-/*  */
+/* ********************* MISE EN PAGE SANS CONTEXTE : similaire à PINTEREST ou TRELLO ************************ */
 
 .gallery {
   display: grid;
@@ -383,10 +392,4 @@ main.menu{
   display: block;
 
   object-fit: cover;
-}
-
-
-@font-face{
-    font-family: DIN;
-    src: url("../fonts/D-DIN.ttf");
 }

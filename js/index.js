@@ -1,4 +1,4 @@
-// initialisation des variables
+/////////////////////////////////// INITIALISATION DES VARIABLES ////////////////////////////////////////
 
 const intro = document.querySelector(".relative"); //layer intro
 const btnMenu = document.querySelector("#btnMenu");
@@ -9,6 +9,8 @@ const btnTravel = document.querySelector("main>.btn");
 
 var planet = null;
 
+/////////////////////////////////// ZONE EVENTS ////////////////////////////////////////
+
 intro.addEventListener("click", start);
 out.addEventListener("click", menu);
 btnMenu.addEventListener("click", menu);
@@ -18,6 +20,8 @@ btnTravel.addEventListener("click", travel)
 document.querySelectorAll('.planet').forEach(e => {
     e.addEventListener("click", planetSelect)
 });
+
+/////////////////////////////////// ZONE FONCTIONS ////////////////////////////////////////
 
 function start() {
     // fait disparaitre "l'intro"

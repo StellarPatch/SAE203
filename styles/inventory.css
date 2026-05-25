@@ -2,6 +2,10 @@ html{
     cursor: url("../img/cursor.cur"), pointer;
 }
 
+html:hover{
+    cursor: url("../img/cursor.cur"), pointer;
+}
+
 body{
     margin: 0;
     background: linear-gradient(90deg,rgb(34, 34, 34),rgb(82, 82, 82));
@@ -372,10 +376,12 @@ main.animation{
     cursor: url("../img/cursor.cur"), pointer;
 }
 
+/* cacher les cases des checkbox */
 label input{
     display: none;
 }
 
+/* animations */
 .type:hover{
     opacity: 100%;
 }
@@ -387,6 +393,8 @@ label input{
 label:has(input:checked) > .type{
     opacity: 100%;
 }
+
+/* ************** filtre ************** */
 
 .filtreGrid>div{display: none;}
 
@@ -413,6 +421,8 @@ label:has(input:checked) > .type{
 			display: block;
 		}
 
+
+/* disposition des résultats */
 .filtreGrid{
     display: grid;
     grid-template-columns: repeat(24, 1fr);
@@ -432,6 +442,8 @@ label:has(input:checked) > .type{
 
 /* *********  bar des versions (à améliorer)  ********* */
 
+
+/* *********************** ZONE INPUTS ************************** */
 .btn{
     position: relative;
     width: 192px;
@@ -517,5 +529,3 @@ select{
 .reset:hover{
     color: red;
 }
-
-/* ****************************** PARTIE TIRAGE ANIMATION ****************************** */

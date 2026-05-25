@@ -1,14 +1,13 @@
 <?php
 
     require "fonctions_BDD.php";
-  // ****** ACCES AUX DONNEES ******
-    
+  
+    // VIDENGE DE LA TABLE OBTENTION POR MOTEUR INNODB
   $reset = "TRUNCATE TABLE obtention";
   if (isset($_POST["reset"]))
     ecritureBDD($reset);
 
     // DEFINITION $OPTION DOUBLON
-    
      if (isset($_POST["doublon"])) {
         if (in_array("double", $_POST["doublon"])) {
         $doublon = $_POST["doublon"];} 
@@ -19,7 +18,6 @@
 
 
     // DEFINITION $OPTION RARETE
-
     if (isset($_POST["rarete"])) {
         if (in_array("4", $_POST["rarete"]) || in_array("5", $_POST["rarete"]))
             $rarete = $_POST["rarete"];
@@ -30,13 +28,13 @@
         $rarete = array();}
 
     if (isset($_POST["alphabet"])) {
-        $alphabet = $_POST["alphabet"];
+        $alphabet = $_POST["alphabet"]; // PRENDRE LA VALEUR POUR REQUËTE APRES
     } else {
-        $alphabet = "ASC";} 
+        $alphabet = "ASC";} //INITIAL
 
 // var_dump($alphabet);
 
-//////////////////////////////////// REQUETE 1 ///////////////////////////////////////////
+//////////////////////////////////// REQUETE 1 INVENTAIRE ///////////////////////////////////////////
 
 if (!empty($doublon)) // PAS DE DOUBLON ET RIEN COCHER
     {
@@ -75,7 +73,7 @@ if (!empty($doublon)) // PAS DE DOUBLON ET RIEN COCHER
             }
     } 
 
-//////////////////////////////////// REQUETE 2 ///////////////////////////////////////////
+//////////////////////////////////// REQUETE 2 COLLECTION ///////////////////////////////////////////
 
   if (!empty($doublon)) // PAS DE DOUBLON ET RIEN COCHER
     {
@@ -169,6 +167,7 @@ if (!empty($doublon)) // PAS DE DOUBLON ET RIEN COCHER
         </div>
     </header>
 
+    <!-- MONNAIE -->
     <div id="monnaieMargin">
         <section id="monnaieFlex">
             <div class="monnaie">
@@ -183,7 +182,10 @@ if (!empty($doublon)) // PAS DE DOUBLON ET RIEN COCHER
         </section>
     </div>
 
+    <!-- -------------------------- CONTENU ------------------------------ -->
+
     <main>
+        <!-- FILTRE SUR TYPE -->
          <div class="classification">
             <label for="Physical">
                 <input type="checkbox" name="Physical" id="Physical">
@@ -215,6 +217,7 @@ if (!empty($doublon)) // PAS DE DOUBLON ET RIEN COCHER
             </label>
         </div>
 
+        <!-- FILTRE SUR VOIE -->
         <div class="classification">
             <label for="Destruction">
                 <input type="checkbox" name="Destruction" id="Destruction">
@@ -254,13 +257,15 @@ if (!empty($doublon)) // PAS DE DOUBLON ET RIEN COCHER
             </label>
         </div>
 
-       <div class="filtreGrid rien">
+       <div class="filtreGrid rien"> <!-- la classe rien permet d'afficher tout de base -->
             <?php
+                // sélection de quelle table à prendre en fonction du select qui force un submit
                 if ($selection == "personnage")
                     $table = $tablePersonnage;
                 else
                     $table = $tableObtention;
 
+                // ajoute les classes : voie et type de chaque perso en + des images pour le filtre
                 foreach ($table as $key => $value) {
                     $image = "<div class='" . $table[$key]['voie'] . " ";
                     $image .= $table[$key]['type'] . "'>";
@@ -273,7 +278,10 @@ if (!empty($doublon)) // PAS DE DOUBLON ET RIEN COCHER
         </div>
     </main>
 
+    <!-- OPTIONS DE FILTRE PHP -->
     <form action="<?php $_SERVER['PHP_SELF']?>" method="post">
+
+            <!-- CHOIX ENTRE CEUX OBTENU ET CEUX EXISTANTS -->
             <select name="selection" onchange=submit()>
                 <option value="obtention"
                 <?php if ($selection=="obtention"){
@@ -285,6 +293,7 @@ if (!empty($doublon)) // PAS DE DOUBLON ET RIEN COCHER
                 }?>>LISTE DES PERSONNAGES</option>
             </select>
 
+            <!-- OPTION DOUBLON -->
             <label class="option
             <?php if (in_array("double",$doublon))
                 echo "select"
@@ -296,6 +305,7 @@ if (!empty($doublon)) // PAS DE DOUBLON ET RIEN COCHER
                 <div>DOUBLON</div>
             </label>
 
+            <!-- OPTION PERSO 4* -->
             <label class="option 
             <?php if (in_array("4",$rarete))
                 echo "select"
@@ -307,6 +317,7 @@ if (!empty($doublon)) // PAS DE DOUBLON ET RIEN COCHER
             <div>4 STARS</div>
             </label>
 
+            <!-- OPTION PERSO 5* -->
             <label class="option
             <?php if (in_array("5",$rarete))
                 echo "select"
@@ -318,6 +329,7 @@ if (!empty($doublon)) // PAS DE DOUBLON ET RIEN COCHER
             <div>5 STARS</div>
             </label>
             
+            <!-- OPTION TRI ALPHABETIQUE -->
             <label class="option <?php
             if ($alphabet == "DESC")
                 echo "select";
@@ -339,6 +351,7 @@ if (!empty($doublon)) // PAS DE DOUBLON ET RIEN COCHER
             </div>
             </label>
 
+            <!-- BOUTON POUR EFFACER SON INVENTAIRE -->
             <button class="reset" name="reset" value="1">REINITIALISATION</button>
         </form>
      
@@ -415,8 +428,6 @@ if (!empty($doublon)) // PAS DE DOUBLON ET RIEN COCHER
             <img id="logo" src="img/Logo.png" alt="Logo" draggable="false">
         </section>
     </div> -->
-
-    <!-- PARTIE TIRAGE ANIMATION -->
 
     <script src="js/inventory.js"></script>
 </body>

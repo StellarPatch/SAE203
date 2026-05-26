@@ -334,7 +334,8 @@ img{
 main{
     display: flex;
     justify-content: center;
-    /* flex-direction: column; */
+    align-items: center;
+    flex-direction: column;
     margin-top: 48px;
     transition: 0.2s;
 }
@@ -402,17 +403,51 @@ main.menu{
     color: #fff;
 }
 
+select{
+    height: fit-content;
+    margin-top: 4px;
+    padding: 8px 32px;
+    border-radius: 16px;
+    border: 1px #ffe385 solid;
+    color: white;
+    background: black;
+    text-align: center;
+}
+
 /*  */
 
 #model{
     margin: auto;
     width: 50vw;
-    height: 70vh;
+    height: 60vh;
     /* background: url("../img/World_Path_Space.webp") rgba(0,0,0,0.4);
     background-size: 100%;
     background-repeat: no-repeat; */
 }
 
+.info{
+    text-align: center;
+    border-radius: 8px;
+    box-sizing: content-box;
+    padding: 8px;
+    background: #363236;
+}
+
+.info>h1{
+    background: #c09c7b;
+    margin: 0;
+    font-size: 2em;
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
+}
+
+.info>h2{
+    background: #131313;
+    color: white;
+    margin: 0;
+    padding: 4px;
+    font-size: 1.2em;
+}
 
 @font-face{
     font-family: DIN;

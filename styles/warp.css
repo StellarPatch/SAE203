@@ -490,6 +490,7 @@ main.menu{
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-top: 10vh;
 }
 
 .btn>img{
@@ -542,11 +543,11 @@ select{
 }
 
 .character{
-    height: 200px;
-    width: 100px;
+    height: 250px;
+    width: 250px;
     border-radius: 32px;
     background-image: url("../img/splash/Character_Acheron_Splash_Art.webp");
-    background-size: 300%;
+    background-size: 100%;
     background-repeat: no-repeat;
     background-position-x: center;
     background-position-y: center;
